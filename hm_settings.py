@@ -12,4 +12,4 @@ class Settings():
         self.screen_height = 800
         self.bg_color = (0,230,230)
         self.fps = 30
-        self.bg_image = pg.image.load("D:/Python/Pygame/hungry_martians/farm.png")
+        self.bg_image = pg.image.load("D:/Python/hungry_martians/farm.png")

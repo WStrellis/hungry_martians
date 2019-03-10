@@ -3,7 +3,7 @@
 import pygame as pg, hm_gamefunctions as gameFunc
 
 from hm_settings import Settings
-from hm_characters import Ship
+from hm_characters import Ship, Cow
 from pygame.locals import *
 
 def run_game():
@@ -21,12 +21,14 @@ def run_game():
     pg.display.set_caption("Hungry Hungry Martians")
 
     player = Ship(gameDisplay)
+    cow = Cow(gameDisplay)
 
     while True:
 
         gameFunc.check_events(player)
         player.move_ship()
-        gameFunc.update_screen(gameSettings,gameDisplay,player)
+        cow.move_cow()
+        gameFunc.update_screen(gameSettings,gameDisplay,player,cow)
 
         fpsClock.tick(FPS)
 
