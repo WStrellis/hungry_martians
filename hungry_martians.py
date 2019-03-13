@@ -3,7 +3,7 @@
 import pygame as pg, hm_gamefunctions as gameFunc
 
 from hm_settings import Settings
-from hm_characters import Ship, Cow
+from hm_characters import Ship, Cow, Farmer
 from pygame.locals import *
 
 def run_game():
@@ -22,13 +22,15 @@ def run_game():
 
     player = Ship(gameDisplay)
     cow = Cow(gameDisplay)
+    farmer = Farmer(gameDisplay)
 
     while True:
 
         gameFunc.check_events(player)
-        player.move_ship()
-        cow.move_cow()
-        gameFunc.update_screen(gameSettings,gameDisplay,player,cow)
+        player.move_entity()
+        cow.move_entity()
+        farmer.move_entity()
+        gameFunc.update_screen(gameSettings,gameDisplay,player,cow,farmer)
 
         fpsClock.tick(FPS)
 
