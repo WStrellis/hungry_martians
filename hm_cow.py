@@ -2,9 +2,10 @@
 
 import pygame as pg
 
-class Cow():
+class Cow(pg.sprite.Sprite):
     """ Cows!! """
     def __init__(self,display):
+        super(Cow, self).__init__()
         """initialize a cow"""
         self.display = display
         self.display_rect = display.get_rect()

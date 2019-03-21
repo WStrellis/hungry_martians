@@ -2,10 +2,11 @@
 
 import pygame as pg, random
 
-class Farmer():
+class Farmer(pg.sprite.Sprite):
     """ Farmers"""
     def __init__(self,display):
-        """initialize a cow"""
+        super(Farmer, self).__init__()
+        """initialize a farmer"""
         self.display = display
         self.display_rect = display.get_rect()
 

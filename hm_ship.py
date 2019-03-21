@@ -2,9 +2,10 @@
 
 import pygame as pg
 
-class Ship():
+class Ship(pg.sprite.Sprite):
     """ a class for the player's ship"""
     def __init__(self,display):
+        super(Ship, self).__init__()
         """attributes for the player's ship""" 
 
         # display attributes
