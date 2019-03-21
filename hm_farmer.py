@@ -3,7 +3,7 @@
 import pygame as pg, random
 
 class Farmer(pg.sprite.Sprite):
-    """ Farmers"""
+    """ Bullets from farmers"""
     def __init__(self,display):
         super(Farmer, self).__init__()
         """initialize a farmer"""
@@ -11,7 +11,7 @@ class Farmer(pg.sprite.Sprite):
         self.display_rect = display.get_rect()
 
         # load player image get its rect
-        self.image = pg.image.load("D:/Python/hungry_martians/farmer_left.png").convert_alpha()
+        self.image = pg.image.load("D:/Python/hungry_martians/farmer_right.png").convert_alpha()
 
         # starting position
         self.rect = self.image.get_rect()
@@ -20,10 +20,11 @@ class Farmer(pg.sprite.Sprite):
         self.rect.centerx = random.randint(20,970)
         self.rect.bottom = 750 
 
-        #movement flags
+        #movement 
         self.moving_right = True
         self.moving_left = False
         self.speed = 3
+        self.move_tracker = 0
 
     def blit_farmer(self):
         """ draw entity onto the screen"""
@@ -44,5 +45,13 @@ class Farmer(pg.sprite.Sprite):
             else:
                 self.moving_right = True
                 self.moving_left = False
+
+    def farmer_aim(self):
+        """ return the coordinates of the barrel of the 
+        gun so that bullets can be properly positioned"""
+        if self.moving_left:
+            return self.rect.topleft
+        elif self.moving_right:
+            return self.rect.topright
 
     

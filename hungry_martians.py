@@ -6,6 +6,7 @@ from hm_settings import Settings
 from hm_ship import Ship
 from hm_cow import Cow
 from hm_farmer import Farmer
+from hm_bullets import Bullet
 from pygame.locals import *
 
 def run_game():
@@ -26,6 +27,7 @@ def run_game():
     player = Ship(gameDisplay)
     cow = Cow(gameDisplay)
     farmer = Farmer(gameDisplay)
+    bullet = Bullet(gameDisplay)
 
 
     while True:
@@ -37,8 +39,8 @@ def run_game():
         gameFunc.check_events(player)
         player.move_ship()
         cow.move_cow()
-        farmer.move_farmer()
-        gameFunc.update_screen(gameSettings,gameDisplay,player,cow,farmer)
+        # farmer.move_farmer()
+        gameFunc.update_screen(gameSettings,gameDisplay,player,cow,farmer,bullet)
 
         clock.tick(FPS) #limit fps to 30
 

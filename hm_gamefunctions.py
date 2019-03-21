@@ -27,11 +27,12 @@ def check_events(player):
     if player.moving_left == True: 
         player.move_ship()
 
-def update_screen(gameSettings, gameDisplay, player,cow,farmer):
+def update_screen(gameSettings, gameDisplay, player,cow,farmer,bullet):
     """ update images on the screen and draw new screen"""
     gameDisplay.fill(gameSettings.bg_color)
     gameDisplay.blit(gameSettings.bg_image,(0,0))
     player.blit_ship()
     farmer.blit_farmer()
     cow.blit_cow()
+    bullet.blit_bullet()
     pg.display.update()
