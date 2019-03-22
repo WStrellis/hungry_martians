@@ -3,6 +3,11 @@
 import sys, pygame as pg
 from pygame.locals import *
 
+def move_farmers(farmers):
+    """ move each farmer"""
+    for f in farmers:
+        f.move_farmer()
+
 def player_movement(player):
     """ check the players movement flags and move the player"""
     if player.moving_right == True: 
@@ -29,12 +34,13 @@ def check_events(player):
             elif event.key == K_LEFT: 
                 player.moving_left = False
 
-def update_screen(gameSettings, gameDisplay, player,cow,farmer,bullet):
+def update_screen(gameSettings, gameDisplay, player,cow,farmers,bullet):
     """ update images on the screen and draw new screen"""
     gameDisplay.fill(gameSettings.bg_color)
     gameDisplay.blit(gameSettings.bg_image,(0,0))
     player.blit_ship()
-    farmer.blit_farmer()
+    for f in farmers:
+        f.blit_farmer()
     cow.blit_cow()
     bullet.blit_bullet()
     pg.display.update()

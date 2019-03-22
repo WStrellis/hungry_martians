@@ -17,7 +17,6 @@ def run_game():
 
     FPS = gameSettings.fps # frames per second setting
     clock = pg.time.Clock() #limit the speed of the game to a maxium of 30 loops per second
-    playtime = 0
 
     #create a screen for the game
     gameDisplay = pg.display.set_mode((gameSettings.screen_width,gameSettings.screen_height))
@@ -26,22 +25,24 @@ def run_game():
 
     player = Ship(gameDisplay)
     cow = Cow(gameDisplay)
-    farmer = Farmer(gameDisplay)
-    bullet = Bullet(gameDisplay,farmer)
 
+    #create farmers
+    farmer1 = Farmer(gameDisplay)
+    farmer2 = Farmer(gameDisplay)
+    #create a group for the farmers
+    farmers = pg.sprite.Group()
+    farmers.add([farmer1,farmer2])
+
+    bullet = Bullet(gameDisplay,farmer1)
 
     while True:
-
-        # milliseconds = clock.tick(FPS)
-        # playtime += milliseconds / 1000.0
-        # print(playtime)
 
         gameFunc.check_events(player)
         gameFunc.player_movement(player)
         player.move_ship()
         cow.move_cow()
-        farmer.move_farmer()
-        gameFunc.update_screen(gameSettings,gameDisplay,player,cow,farmer,bullet)
+        gameFunc.move_farmers(farmers)
+        gameFunc.update_screen(gameSettings,gameDisplay,player,cow,farmers,bullet)
 
         clock.tick(FPS) #limit fps to 30
 
