@@ -1,10 +1,11 @@
 #!python3
 
 import pygame as pg, random
+from hm_bullets import Bullet
 
 class Farmer(pg.sprite.Sprite):
     """ Bullets from farmers"""
-    def __init__(self,display):
+    def __init__(self,shot_trigger,display):
         super(Farmer, self).__init__()
         """initialize a farmer"""
         self.display = display
@@ -25,7 +26,7 @@ class Farmer(pg.sprite.Sprite):
         self.moving_left = False
         self.speed = 3
 
-        self.shot_trigger = 3
+        self.shot_trigger = shot_trigger
         self.move_tracker = 0
 
     def blit_farmer(self):
@@ -58,4 +59,8 @@ class Farmer(pg.sprite.Sprite):
         elif self.moving_right:
             return self.rect.topright
 
-    
+    def shoot(self,display,bullets):
+        """ create a bullet""" 
+        bullet_start = self.farmer_aim()
+        new_bullet = Bullet(bullet_start,display)
+        bullets.add(new_bullet)

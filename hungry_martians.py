@@ -27,13 +27,14 @@ def run_game():
     cow = Cow(gameDisplay)
 
     #create farmers
-    farmer1 = Farmer(gameDisplay)
-    farmer2 = Farmer(gameDisplay)
+    farmer1 = Farmer(10, gameDisplay)
+    farmer2 = Farmer(15, gameDisplay)
     #create a group for the farmers
     farmers = pg.sprite.Group()
     farmers.add([farmer1,farmer2])
 
-    bullet = Bullet(gameDisplay,farmer1)
+    #create a group for the bullets
+    bullets = pg.sprite.Group()
 
     while True:
 
@@ -42,7 +43,9 @@ def run_game():
         player.move_ship()
         cow.move_cow()
         gameFunc.move_farmers(farmers)
-        gameFunc.update_screen(gameSettings,gameDisplay,player,cow,farmers,bullet)
+        gameFunc.farmer_shoot(farmers,gameDisplay,bullets)
+        gameFunc.move_bullet(bullets)
+        gameFunc.update_screen(gameSettings,gameDisplay,player,cow,farmers,bullets)
 
         clock.tick(FPS) #limit fps to 30
 
