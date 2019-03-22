@@ -37,6 +37,7 @@ def run_game():
         # print(playtime)
 
         gameFunc.check_events(player)
+        gameFunc.player_movement(player)
         player.move_ship()
         cow.move_cow()
         farmer.move_farmer()

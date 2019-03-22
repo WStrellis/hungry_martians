@@ -24,6 +24,8 @@ class Farmer(pg.sprite.Sprite):
         self.moving_right = True
         self.moving_left = False
         self.speed = 3
+
+        self.shot_trigger = 3
         self.move_tracker = 0
 
     def blit_farmer(self):
@@ -45,6 +47,8 @@ class Farmer(pg.sprite.Sprite):
             else:
                 self.moving_right = True
                 self.moving_left = False
+
+        self.move_tracker += 1
 
     def farmer_aim(self):
         """ return the coordinates of the barrel of the 

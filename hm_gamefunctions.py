@@ -3,6 +3,13 @@
 import sys, pygame as pg
 from pygame.locals import *
 
+def player_movement(player):
+    """ check the players movement flags and move the player"""
+    if player.moving_right == True: 
+        player.move_ship()
+    if player.moving_left == True: 
+        player.move_ship()
+
 def check_events(player):
     """Respond to key presses and events"""
     for event in pg.event.get():
@@ -21,11 +28,6 @@ def check_events(player):
                 player.moving_right = False
             elif event.key == K_LEFT: 
                 player.moving_left = False
-        
-    if player.moving_right == True: 
-        player.move_ship()
-    if player.moving_left == True: 
-        player.move_ship()
 
 def update_screen(gameSettings, gameDisplay, player,cow,farmer,bullet):
     """ update images on the screen and draw new screen"""
