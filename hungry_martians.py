@@ -27,7 +27,7 @@ def run_game():
     player = Ship(gameDisplay)
     cow = Cow(gameDisplay)
     farmer = Farmer(gameDisplay)
-    bullet = Bullet(gameDisplay)
+    bullet = Bullet(gameDisplay,farmer)
 
 
     while True:
@@ -39,7 +39,7 @@ def run_game():
         gameFunc.check_events(player)
         player.move_ship()
         cow.move_cow()
-        # farmer.move_farmer()
+        farmer.move_farmer()
         gameFunc.update_screen(gameSettings,gameDisplay,player,cow,farmer,bullet)
 
         clock.tick(FPS) #limit fps to 30

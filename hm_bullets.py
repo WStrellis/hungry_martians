@@ -4,7 +4,7 @@ import pygame as pg, random
 
 class Bullet(pg.sprite.Sprite):
     """ Bullets from farmers"""
-    def __init__(self,display):
+    def __init__(self,display,farmer):
         super(Bullet, self).__init__()
         """initialize a bullet"""
         self.display = display
@@ -14,11 +14,11 @@ class Bullet(pg.sprite.Sprite):
         self.image = pg.image.load("D:/Python/hungry_martians/hm_bullet.png").convert_alpha()
 
         # starting position
-        self.rect = self.image.get_rect()
+        self.rect = farmer.farmer_aim()
 
         #set bullet starting position
-        self.rect.centerx = 500
-        self.rect.centery = 400 
+        # self.rect.centerx = 500
+        # self.rect.centery = 400 
 
         #movement 
         self.speed = 20 
