@@ -27,9 +27,11 @@ def move_bullet(bullets):
 def player_movement(player):
     """ check the players movement flags and move the player"""
     if player.moving_right == True: 
-        player.move_ship()
+        # player.move_ship()
+        player.move_self()
     if player.moving_left == True: 
-        player.move_ship()
+        # player.move_ship()
+        player.move_self()
 
 def check_events(player):
     """Respond to key presses and events"""
@@ -54,7 +56,7 @@ def update_screen(gameSettings, gameDisplay, player,cow,farmers,bullets):
     """ update images on the screen and draw new screen"""
     gameDisplay.fill(gameSettings.bg_color)
     gameDisplay.blit(gameSettings.bg_image,(0,0))
-    player.blit_ship()
+    player.blit_self()
     for f in farmers:
         f.blit_farmer()
     cow.blit_cow()

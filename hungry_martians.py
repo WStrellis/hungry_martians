@@ -23,7 +23,7 @@ def run_game():
     # set name of program at top of window
     pg.display.set_caption("Hungry Hungry Martians")
 
-    player = Ship(gameDisplay)
+    player = Ship(gameDisplay,"D:/Python/hungry_martians/alien_ship.png",500,200,False,False,10,3)
     cow = Cow(gameDisplay)
 
     #create farmers
@@ -40,7 +40,7 @@ def run_game():
 
         gameFunc.check_events(player)
         gameFunc.player_movement(player)
-        player.move_ship()
+        player.move_self()
         cow.move_cow()
         gameFunc.move_farmers(farmers)
         gameFunc.farmer_shoot(farmers,gameDisplay,bullets)
