@@ -1,30 +1,15 @@
 #!python3
 
-import pygame as pg, random
+from hm_characters import Character
+from hm_settings import Settings
 
-class Bullet(pg.sprite.Sprite):
-    """ Bullets from farmers"""
-    def __init__(self,start_pos,display):
-        super(Bullet, self).__init__()
-        """initialize a bullet"""
-        self.display = display
-        self.display_rect = display.get_rect()
+class Bullet(Character):
+    # used to access the bullet image
+    gs = Settings()
+    """ a class for the player's ship"""
+    def __init__(self, display, image, centerx, bottom, moving_left, moving_right, speed):
+        super().__init__(display, image, centerx, bottom, moving_left, moving_right, speed)
 
-        # load player image get its rect
-        self.image = pg.image.load("D:/Python/hungry_martians/hm_bullet.png").convert_alpha()
-
-        # starting position
-        self.rect = list(start_pos)
-
-        #movement 
-        self.speed = 15 
-
-    def move_bullet(self):
+    def move_self(self):
         """move the bullet"""
-        self.rect[1] -= self.speed
-
-    def blit_bullet(self):
-        """ draw entity onto the screen"""
-        self.display.blit(self.image,self.rect)
-
-    
+        self.rect.bottom -= self.speed

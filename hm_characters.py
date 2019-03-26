@@ -4,20 +4,14 @@ import pygame as pg, random
 
 class Character(pg.sprite.Sprite):
     """ Super class for all character entities in the game"""
-    def __init__(self,display,image, centerx, bottom,moving_left, moving_right, speed, imageLeft = '', imageRight=''):
+    def __init__(self,display,image, centerx, bottom,moving_left, moving_right, speed):
         super(Character,self).__init__()
         self.display = display
         self.display_rect = display.get_rect()
 
         # load entity image get its rect
-        self.image = pg.image.load(image).convert_alpha()
-
-        if imageLeft != '' and imageRight != '':
-            self.imageLeft = pg.image.load(imageLeft).convert_alpha()
-            self.imageRight = pg.image.load(imageRight).convert_alpha()
-        else:
-            self.imageLeft = imageLeft 
-            self.imageRight = imageRight
+        # self.image = pg.image.load(image).convert_alpha()
+        self.image = image
 
         # starting position
         self.rect = self.image.get_rect()

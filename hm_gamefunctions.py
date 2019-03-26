@@ -6,7 +6,7 @@ from pygame.locals import *
 def move_farmers(farmers):
     """ move each farmer"""
     for f in farmers:
-        f.move_farmer()
+        f.move_self()
 
 def farmer_shoot(farmers,display,bullets):
     """ call shoot for each farmer"""
@@ -18,7 +18,7 @@ def farmer_shoot(farmers,display,bullets):
 def move_bullet(bullets):
     """move each bullet"""
     for b in bullets:
-        b.move_bullet()
+        b.move_self()
     # remove bullets that have left the screen
     for b in bullets.copy():
         if b.rect[1] <= 0:
@@ -27,10 +27,8 @@ def move_bullet(bullets):
 def player_movement(player):
     """ check the players movement flags and move the player"""
     if player.moving_right == True: 
-        # player.move_ship()
         player.move_self()
     if player.moving_left == True: 
-        # player.move_ship()
         player.move_self()
 
 def check_events(player):
@@ -58,8 +56,8 @@ def update_screen(gameSettings, gameDisplay, player,cow,farmers,bullets):
     gameDisplay.blit(gameSettings.bg_image,(0,0))
     player.blit_self()
     for f in farmers:
-        f.blit_farmer()
+        f.blit_self()
     cow.blit_self()
     for b in bullets:
-        b.blit_bullet()
+        b.blit_self()
     pg.display.update()

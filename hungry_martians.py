@@ -23,12 +23,12 @@ def run_game():
     # set name of program at top of window
     pg.display.set_caption("Hungry Hungry Martians")
 
-    player = Ship(gameDisplay,"D:/Python/hungry_martians/alien_ship.png",500,200,False,False,10,3)
-    cow = Cow(gameDisplay,"D:/Python/hungry_martians/cow_right.png",500,750,False,True,5,"D:/Python/hungry_martians/cow_left.png","D:/Python/hungry_martians/cow_right.png")
+    player = Ship(gameDisplay,gameSettings.ufo,500,200,False,False,10,3)
+    cow = Cow(gameDisplay,gameSettings.cow_left,500,750,False,True,5, gameSettings.cow_left, gameSettings.cow_right)
 
     #create farmers
-    farmer1 = Farmer(10, gameDisplay)
-    farmer2 = Farmer(15, gameDisplay)
+    farmer1 = Farmer(gameDisplay,gameSettings.farmer_left,300,750,True,False, 3, gameSettings.farmer_left, gameSettings.farmer_right, 12)
+    farmer2 = Farmer(gameDisplay,gameSettings.farmer_right,600,750,False,True, 3, gameSettings.farmer_left, gameSettings.farmer_right, 17)
     #create a group for the farmers
     farmers = pg.sprite.Group()
     farmers.add([farmer1,farmer2])

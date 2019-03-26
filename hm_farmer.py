@@ -1,66 +1,50 @@
 #!python3
 
-import pygame as pg, random
+import pygame as pg
+from hm_characters import Character
 from hm_bullets import Bullet
 
-class Farmer(pg.sprite.Sprite):
-    """ Bullets from farmers"""
-    def __init__(self,shot_trigger,display):
-        super(Farmer, self).__init__()
-        """initialize a farmer"""
-        self.display = display
-        self.display_rect = display.get_rect()
+class Farmer(Character):
+    """ Class for Farmers"""
 
-        # load player image get its rect
-        self.image = pg.image.load("D:/Python/hungry_martians/farmer_right.png").convert_alpha()
+    def __init__(self, display, img, centerx, bottom, moving_left, moving_right, speed, imgLeft, imgRight, shot_trigger):
+        super().__init__(display,img,centerx,bottom,moving_left,moving_right,speed)
 
-        # starting position
-        self.rect = self.image.get_rect()
-
-        #set farmer starting position
-        self.rect.centerx = random.randint(20,970)
-        self.rect.bottom = 750 
-
-        #movement 
-        self.moving_right = True
-        self.moving_left = False
-        self.speed = 3
+        self.imageLeft = imgLeft
+        self.imageRight = imgRight
 
         self.shot_trigger = shot_trigger
         self.move_tracker = 0
 
-    def blit_farmer(self):
-        """ draw entity onto the screen"""
-        self.display.blit(self.image,self.rect)
-
-    def move_farmer(self):
+    def move_self(self):
         if self.moving_right:
-            self.image = pg.image.load("D:/Python/hungry_martians/farmer_right.png").convert_alpha()
-            if self.rect.right <= 994:
+            self.image = self.imageRight
+            if self.rect.right <= (self.display_rect.right - 6):
                 self.rect.centerx += self.speed
             else:
                 self.moving_right = False
                 self.moving_left = True
         if self.moving_left:
-            self.image = pg.image.load("D:/Python/hungry_martians/farmer_left.png").convert_alpha()
+            self.image = self.imageLeft
             if self.rect.left >= 6:
                 self.rect.centerx -= self.speed
             else:
                 self.moving_right = True
                 self.moving_left = False
 
+        # used to trigger when the farmer shoots
         self.move_tracker += 1
-
+    
     def farmer_aim(self):
         """ return the coordinates of the barrel of the 
         gun so that bullets can be properly positioned"""
         if self.moving_left:
-            return self.rect.topleft
+            return list(self.rect.topleft)
         elif self.moving_right:
-            return self.rect.topright
+            return list(self.rect.topright)
 
     def shoot(self,display,bullets):
         """ create a bullet""" 
         bullet_start = self.farmer_aim()
-        new_bullet = Bullet(bullet_start,display)
+        new_bullet = Bullet(display, Bullet.gs.bullet_img, bullet_start[0], bullet_start[1], 0, 0, 15)
         bullets.add(new_bullet)

@@ -5,8 +5,10 @@ from hm_characters import Character
 class Cow(Character):
     """ a class for cows"""
     def __init__(self,display,image,centerx,bottom,moving_left,moving_right,speed,imgLeft,imgRight):
-        super().__init__(display,image,centerx,bottom,moving_left,moving_right,speed,imageLeft=imgLeft,imageRight=imgRight)
+        super().__init__(display,image,centerx,bottom,moving_left,moving_right,speed)
         """attributes for the cow""" 
+        self.imageLeft = imgLeft
+        self.imageRight = imgRight
 
     def move_self(self):
         if self.moving_right:
