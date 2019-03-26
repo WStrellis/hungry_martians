@@ -1,6 +1,5 @@
 #!python3
 
-# import pygame as pg
 from hm_characters import Character
 
 class Ship(Character):

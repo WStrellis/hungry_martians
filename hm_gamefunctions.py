@@ -59,7 +59,7 @@ def update_screen(gameSettings, gameDisplay, player,cow,farmers,bullets):
     player.blit_self()
     for f in farmers:
         f.blit_farmer()
-    cow.blit_cow()
+    cow.blit_self()
     for b in bullets:
         b.blit_bullet()
     pg.display.update()

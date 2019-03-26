@@ -24,7 +24,7 @@ def run_game():
     pg.display.set_caption("Hungry Hungry Martians")
 
     player = Ship(gameDisplay,"D:/Python/hungry_martians/alien_ship.png",500,200,False,False,10,3)
-    cow = Cow(gameDisplay)
+    cow = Cow(gameDisplay,"D:/Python/hungry_martians/cow_right.png",500,750,False,True,5,"D:/Python/hungry_martians/cow_left.png","D:/Python/hungry_martians/cow_right.png")
 
     #create farmers
     farmer1 = Farmer(10, gameDisplay)
@@ -41,7 +41,7 @@ def run_game():
         gameFunc.check_events(player)
         gameFunc.player_movement(player)
         player.move_self()
-        cow.move_cow()
+        cow.move_self()
         gameFunc.move_farmers(farmers)
         gameFunc.farmer_shoot(farmers,gameDisplay,bullets)
         gameFunc.move_bullet(bullets)
