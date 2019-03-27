@@ -27,8 +27,12 @@ def move_bullet(bullets):
 def ship_hit(ship,bullets):
     """ Check if the player's ship has been hit by farmer's bullets"""
     if pg.sprite.spritecollideany(ship,bullets):
-        print("ship hit!")
-        bullets = []
+        # subtract 1 hp from the ship
+        ship.hp -= 1
+        print("ship hit! " + str(ship.hp))
+        #delete all bullets
+        for b in bullets.copy():
+            b.kill()
 
 def player_movement(player):
     """ check the players movement flags and move the player"""
