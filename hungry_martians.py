@@ -23,12 +23,16 @@ def run_game():
     # set name of program at top of window
     pg.display.set_caption("Hungry Hungry Martians")
 
+    # create the player
     player = Ship(gameDisplay,gameSettings.ufo,500,200,False,False,10,3)
+
+	# create cows
     cow = Cow(gameDisplay,gameSettings.cow_left,500,750,False,True,5, gameSettings.cow_left, gameSettings.cow_right)
 
     #create farmers
     farmer1 = Farmer(gameDisplay,gameSettings.farmer_left,300,750,True,False, 3, gameSettings.farmer_left, gameSettings.farmer_right, 12)
     farmer2 = Farmer(gameDisplay,gameSettings.farmer_right,600,750,False,True, 3, gameSettings.farmer_left, gameSettings.farmer_right, 17)
+
     #create a group for the farmers
     farmers = pg.sprite.Group()
     farmers.add([farmer1,farmer2])
@@ -45,6 +49,7 @@ def run_game():
         gameFunc.move_farmers(farmers)
         gameFunc.farmer_shoot(farmers,gameDisplay,bullets)
         gameFunc.move_bullet(bullets)
+        gameFunc.ship_hit(player,bullets)
         gameFunc.update_screen(gameSettings,gameDisplay,player,cow,farmers,bullets)
 
         clock.tick(FPS) #limit fps to 30

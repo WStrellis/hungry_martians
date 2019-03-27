@@ -24,6 +24,12 @@ def move_bullet(bullets):
         if b.rect[1] <= 0:
             bullets.remove(b)
 
+def ship_hit(ship,bullets):
+    """ Check if the player's ship has been hit by farmer's bullets"""
+    if pg.sprite.spritecollideany(ship,bullets):
+        print("ship hit!")
+        bullets = []
+
 def player_movement(player):
     """ check the players movement flags and move the player"""
     if player.moving_right == True: 
