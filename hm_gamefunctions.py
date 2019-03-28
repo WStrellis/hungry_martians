@@ -24,15 +24,17 @@ def move_bullet(bullets):
         if b.rect[1] <= 0:
             bullets.remove(b)
 
-def ship_hit(ship,bullets):
+def ship_hit(ship,bullets,shield):
     """ Check if the player's ship has been hit by farmer's bullets"""
     if pg.sprite.spritecollideany(ship,bullets):
         # subtract 1 hp from the ship
         ship.hp -= 1
-        print("ship hit! " + str(ship.hp))
+        # update the shield icon
+        shield.setImage(ship.hp)
         #delete all bullets
         for b in bullets.copy():
             b.kill()
+
 
 def player_movement(player):
     """ check the players movement flags and move the player"""
@@ -60,7 +62,7 @@ def check_events(player):
             elif event.key == K_LEFT: 
                 player.moving_left = False
 
-def update_screen(gameSettings, gameDisplay, player,cow,farmers,bullets):
+def update_screen(gameSettings, gameDisplay, player,cow,farmers,bullets,uxobj):
     """ update images on the screen and draw new screen"""
     gameDisplay.fill(gameSettings.bg_color)
     gameDisplay.blit(gameSettings.bg_image,(0,0))
@@ -70,4 +72,6 @@ def update_screen(gameSettings, gameDisplay, player,cow,farmers,bullets):
     cow.blit_self()
     for b in bullets:
         b.blit_self()
+    for u in uxobj:
+        u.blit_self()
     pg.display.update()

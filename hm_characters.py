@@ -13,10 +13,10 @@ class Character(pg.sprite.Sprite):
         # self.image = pg.image.load(image).convert_alpha()
         self.image = image
 
-        # starting position
+        # rect size
         self.rect = self.image.get_rect()
 
-        #set farmer starting position
+        #set starting position
         self.rect.centerx = centerx
         self.rect.bottom = bottom 
 

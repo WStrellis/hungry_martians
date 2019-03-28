@@ -24,3 +24,5 @@ class Settings():
         self.farmer_right = pg.image.load("D:/Python/hungry_martians/farmer_right.png")
 
         self.bullet_img = pg.image.load("D:/Python/hungry_martians/hm_bullet.png")
+
+        self.green_shield = pg.image.load("D:/Python/hungry_martians/green_shield.png")
