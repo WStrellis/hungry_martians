@@ -26,6 +26,8 @@ def run_game():
 
     # ux components
     shield_indicator = ShieldIcon(gameDisplay,gameSettings.green_shield,100,70)
+    play_button = UXcomponent(gameDisplay,gameSettings.playButton,500,500)
+    title = UXcomponent(gameDisplay,gameSettings.title,500,340)
 
     # group for ux components
     uxObjects = pg.sprite.Group()
@@ -49,17 +51,21 @@ def run_game():
     #create a group for the bullets
     bullets = pg.sprite.Group()
 
+    # gameState = "active"
+    gameState = "inactive"
+
     while True:
 
         gameFunc.check_events(player)
-        gameFunc.player_movement(player)
-        player.move_self()
-        cow.move_self()
-        gameFunc.move_farmers(farmers)
-        gameFunc.farmer_shoot(farmers,gameDisplay,bullets)
-        gameFunc.move_bullet(bullets)
-        gameFunc.ship_hit(player,bullets,shield_indicator)
-        gameFunc.update_screen(gameSettings,gameDisplay,player,cow,farmers,bullets,uxObjects)
+        if gameState == "active":
+            gameFunc.player_movement(player)
+            player.move_self()
+            cow.move_self()
+            gameFunc.move_farmers(farmers)
+            gameFunc.farmer_shoot(farmers,gameDisplay,bullets)
+            gameFunc.move_bullet(bullets)
+            gameFunc.ship_hit(player,bullets,shield_indicator)
+        gameFunc.update_screen(gameSettings,gameDisplay,player,cow,farmers,bullets,shield_indicator,gameState,title,play_button)
 
         clock.tick(FPS) #limit fps to 30
 

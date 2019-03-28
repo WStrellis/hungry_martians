@@ -62,7 +62,7 @@ def check_events(player):
             elif event.key == K_LEFT: 
                 player.moving_left = False
 
-def update_screen(gameSettings, gameDisplay, player,cow,farmers,bullets,uxobj):
+def update_screen(gameSettings, gameDisplay, player,cow,farmers,bullets,shield,gameState,title,play):
     """ update images on the screen and draw new screen"""
     gameDisplay.fill(gameSettings.bg_color)
     gameDisplay.blit(gameSettings.bg_image,(0,0))
@@ -72,6 +72,9 @@ def update_screen(gameSettings, gameDisplay, player,cow,farmers,bullets,uxobj):
     cow.blit_self()
     for b in bullets:
         b.blit_self()
-    for u in uxobj:
-        u.blit_self()
+    shield.blit_self()
+    if gameState == 'inactive':
+        title.blit_self()
+        play.blit_self()
+
     pg.display.update()

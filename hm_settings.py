@@ -25,4 +25,7 @@ class Settings():
 
         self.bullet_img = pg.image.load("D:/Python/hungry_martians/hm_bullet.png")
 
+        # ux components
+        self.title = pg.image.load("D:/Python/hungry_martians/title.png")
+        self.playButton = pg.image.load("D:/Python/hungry_martians/play_button.png")
         self.green_shield = pg.image.load("D:/Python/hungry_martians/green_shield.png")
