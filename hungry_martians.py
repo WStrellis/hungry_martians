@@ -29,9 +29,13 @@ def run_game():
     play_button = UXcomponent(gameDisplay,gameSettings.playButton,500,500)
     title = UXcomponent(gameDisplay,gameSettings.title,500,340)
 
-    # group for ux components
-    uxObjects = pg.sprite.Group()
-    uxObjects.add([shield_indicator])
+    # group for new game menu components
+    newgameUX = pg.sprite.Group()
+    newgameUX.add([title,play_button])
+
+    # group for game over menu components
+    gameoverUX = pg.sprite.Group()
+    gameoverUX.add([title,play_button])
     
 
     # create the player
@@ -51,13 +55,14 @@ def run_game():
     #create a group for the bullets
     bullets = pg.sprite.Group()
 
-    # gameState = "active"
-    gameState = "inactive"
+    # gameState = "running"
+    gameState = "newgame"
+    # gameState = "gameover"
 
     while True:
 
         gameFunc.check_events(player)
-        if gameState == "active":
+        if gameState == "running":
             gameFunc.player_movement(player)
             player.move_self()
             cow.move_self()
@@ -65,7 +70,9 @@ def run_game():
             gameFunc.farmer_shoot(farmers,gameDisplay,bullets)
             gameFunc.move_bullet(bullets)
             gameFunc.ship_hit(player,bullets,shield_indicator)
-        gameFunc.update_screen(gameSettings,gameDisplay,player,cow,farmers,bullets,shield_indicator,gameState,title,play_button)
+            gameFunc.update_characters(gameSettings,gameDisplay,player,cow,farmers,bullets,shield_indicator)
+        else:
+            gameFunc.update_UX(gameSettings,gameDisplay,gameState,newgameUX,gameoverUX)
 
         clock.tick(FPS) #limit fps to 30
 
