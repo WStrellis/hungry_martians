@@ -21,13 +21,14 @@ def run_game():
 
     #create a screen for the game
     gameDisplay = pg.display.set_mode((gameSettings.screen_width,gameSettings.screen_height))
+
     # set name of program at top of window
-    pg.display.set_caption("Hungry Hungry Martians")
+    pg.display.set_caption("Hungry Martians")
 
     # ux components
-    shield_indicator = ShieldIcon(gameDisplay,gameSettings.green_shield,100,70)
+    shield_indicator = ShieldIcon(gameDisplay,gameSettings.green_shield,125,175)
     play_button = UXcomponent(gameDisplay,gameSettings.playButton,500,500)
-    title = UXcomponent(gameDisplay,gameSettings.title,500,340)
+    title = UXcomponent(gameDisplay,gameSettings.title,330,340)
 
     # group for new game menu components
     newgameUX = pg.sprite.Group()
@@ -55,14 +56,17 @@ def run_game():
     #create a group for the bullets
     bullets = pg.sprite.Group()
 
-    # gameState = "running"
-    gameState = "newgame"
-    # gameState = "gameover"
+    class GameState():
+        def __init__(self):
+            self.state = "newgame"
+
+
+    gameState = GameState()
 
     while True:
 
-        gameFunc.check_events(player)
-        if gameState == "running":
+        gameFunc.check_events(player, play_button, gameState)
+        if gameState.state == "running":
             gameFunc.player_movement(player)
             player.move_self()
             cow.move_self()
@@ -70,6 +74,8 @@ def run_game():
             gameFunc.farmer_shoot(farmers,gameDisplay,bullets)
             gameFunc.move_bullet(bullets)
             gameFunc.ship_hit(player,bullets,shield_indicator)
+            if player.hp < 0:
+                gameState.state = "gameover"
             gameFunc.update_characters(gameSettings,gameDisplay,player,cow,farmers,bullets,shield_indicator)
         else:
             gameFunc.update_UX(gameSettings,gameDisplay,gameState,newgameUX,gameoverUX)

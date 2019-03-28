@@ -43,7 +43,7 @@ def player_movement(player):
     if player.moving_left == True: 
         player.move_self()
 
-def check_events(player):
+def check_events(player,play_button,game_state):
     """Respond to key presses and events"""
     for event in pg.event.get():
         if event.type == QUIT or (event.type== KEYDOWN and event.key == K_ESCAPE):
@@ -62,6 +62,17 @@ def check_events(player):
             elif event.key == K_LEFT: 
                 player.moving_left = False
 
+        #start the game when the player clicks "play"
+        if event.type == MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pg.mouse.get_pos()
+            print(mouse_x, mouse_y)
+            playGame(mouse_x,mouse_y,game_state, play_button)
+
+def playGame(mouse_x, mouse_y, gameState, play_button):
+    """ start the game if the player clicks the mouse button"""
+    if play_button.rect.collidepoint(mouse_x,mouse_y):
+        gameState.state = "running"
+
 def update_characters(gameSettings, gameDisplay, player,cow,farmers,bullets,shield):
     """ update images on the screen and draw new screen"""
     gameDisplay.fill(gameSettings.bg_color)
@@ -78,11 +89,11 @@ def update_characters(gameSettings, gameDisplay, player,cow,farmers,bullets,shie
 
 def update_UX(gameSettings,gameDisplay,gameState,newgameUX,gameoverUX):
     """ update ux images on the screen"""
-    if gameState == 'newgame':
+    if gameState.state == 'newgame':
         gameDisplay.blit(gameSettings.bg_image,(0,0))
         for n in newgameUX:
             n.blit_self()
-    elif gameState == 'gameover':
+    elif gameState.state == 'gameover':
         for g in gameoverUX:
             g.blit_self()
 

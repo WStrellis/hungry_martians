@@ -16,7 +16,8 @@ class UXcomponent(pg.sprite.Sprite):
         self.image = image
 
      # rect size
-        self.rect = self.image.get_rect()
+        # self.rect = self.image.get_rect()
+        self.rect = pg.Rect(0,0, 173,159)
 
         #set starting position
         self.rect.centerx = centerx
