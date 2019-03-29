@@ -3,6 +3,12 @@
 import sys, pygame as pg
 from pygame.locals import *
 
+def init_stats(settings, ship, shield):
+    """ reset everything to the start value"""
+    settings.level = 0
+    ship.hp = 3
+    shield.setImage(ship.hp)
+
 def move_farmers(farmers):
     """ move each farmer"""
     for f in farmers:
@@ -45,7 +51,7 @@ def player_movement(player):
     if player.moving_left == True: 
         player.move_self()
 
-def check_events(player,play_button,gameState):
+def check_events(player,settings,ngUX,goUX, shield):
     """Respond to key presses and events"""
     for event in pg.event.get():
         if event.type == QUIT or (event.type== KEYDOWN and event.key == K_ESCAPE):
@@ -65,14 +71,43 @@ def check_events(player,play_button,gameState):
                 player.moving_left = False
 
         #start the game when the player clicks "play"
-        if event.type == MOUSEBUTTONDOWN:
-            mouse_x, mouse_y = pg.mouse.get_pos()
-            playGame(mouse_x,mouse_y,gameState, play_button)
+        if settings.state in ['newgame','gameover','level']:
+            if event.type == MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = pg.mouse.get_pos()
 
-def playGame(mouse_x, mouse_y, gameState, play_button):
+                if settings.state == 'newgame':
+                    playButton = ngUX[1]
+                    quitButton = ngUX[2]
+                    playGame(mouse_x,mouse_y,settings, playButton,quitButton)
+
+                if settings.state == 'gameover':
+                    resetButton = ngUX[1]
+                    quitButton = ngUX[2]
+                    resetGame(mouse_x,mouse_y,settings, resetButton,quitButton, player, shield)
+
+                if settings.state == 'level':
+                    pass
+
+def playGame(mouse_x, mouse_y, gameState, play_button,quit_button):
     """ start the game if the player clicks the mouse button"""
     if play_button.rect.collidepoint(mouse_x,mouse_y):
         gameState.state = "running"
+    if quit_button.rect.collidepoint(mouse_x,mouse_y):
+      quitGame() 
+
+def resetGame(mouse_x, mouse_y, gameState, reset_button,quit_button, player,shield):
+    """ reset game settings to initial values"""
+    if reset_button.rect.collidepoint(mouse_x,mouse_y):
+        init_stats(gameState, player,shield)
+        gameState.state = "newgame"
+    if quit_button.rect.collidepoint(mouse_x,mouse_y):
+      quitGame() 
+
+
+def quitGame():
+    """ quit the game if the player clicks the quit button"""
+    pg.quit()
+    sys.exit()
 
 def update_characters(gameSettings, gameDisplay, player,cow,farmers,bullets,shield):
     """ update images on the screen and draw new screen"""

@@ -27,17 +27,18 @@ def run_game():
 
     # ux components
     shield_indicator = ShieldIcon(gameDisplay,gameSettings.green_shield,125,175)
-    play_button = UXcomponent(gameDisplay,gameSettings.playButton,500,500)
+
     title = UXcomponent(gameDisplay,gameSettings.title,330,340)
 
+    play_button = UXcomponent(gameDisplay,gameSettings.playButton,500,500)
+    restart_button = UXcomponent(gameDisplay,gameSettings.restartButton,500,500)
+    quit_button = UXcomponent(gameDisplay,gameSettings.quitButton,500,700)
+
     # group for new game menu components
-    newgameUX = pg.sprite.Group()
-    newgameUX.add([title,play_button])
+    newgameUX = [title,play_button, quit_button]
 
     # group for game over menu components
-    gameoverUX = pg.sprite.Group()
-    gameoverUX.add([title,play_button])
-    
+    gameoverUX = [title,restart_button, quit_button]
 
     # create the player
     player = Ship(gameDisplay,gameSettings.ufo,500,200,False,False,10,3)
@@ -58,10 +59,11 @@ def run_game():
 
     while True:
 
-        gameFunc.check_events(player, play_button, gameSettings)
+        gameFunc.check_events(player,gameSettings,newgameUX,gameoverUX, shield_indicator)
 
         if gameSettings.state == "newgame":
             gameFunc.newgame(gameSettings,gameDisplay,newgameUX)
+            # gameFunc.init_stats(gameSettings,player)
 
         if gameSettings.state == 'level':
             pass
