@@ -24,7 +24,7 @@ def move_bullet(bullets):
         if b.rect[1] <= 0:
             bullets.remove(b)
 
-def ship_hit(ship,bullets,shield):
+def ship_hit(ship,bullets,shield, gameState):
     """ Check if the player's ship has been hit by farmer's bullets"""
     if pg.sprite.spritecollideany(ship,bullets):
         # subtract 1 hp from the ship
@@ -34,6 +34,8 @@ def ship_hit(ship,bullets,shield):
         #delete all bullets
         for b in bullets.copy():
             b.kill()
+        if ship.hp < 0:
+                gameState.state = "gameover"
 
 
 def player_movement(player):
@@ -43,7 +45,7 @@ def player_movement(player):
     if player.moving_left == True: 
         player.move_self()
 
-def check_events(player,play_button,game_state):
+def check_events(player,play_button,gameState):
     """Respond to key presses and events"""
     for event in pg.event.get():
         if event.type == QUIT or (event.type== KEYDOWN and event.key == K_ESCAPE):
@@ -65,8 +67,7 @@ def check_events(player,play_button,game_state):
         #start the game when the player clicks "play"
         if event.type == MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pg.mouse.get_pos()
-            print(mouse_x, mouse_y)
-            playGame(mouse_x,mouse_y,game_state, play_button)
+            playGame(mouse_x,mouse_y,gameState, play_button)
 
 def playGame(mouse_x, mouse_y, gameState, play_button):
     """ start the game if the player clicks the mouse button"""
@@ -87,14 +88,18 @@ def update_characters(gameSettings, gameDisplay, player,cow,farmers,bullets,shie
 
     pg.display.update()
 
-def update_UX(gameSettings,gameDisplay,gameState,newgameUX,gameoverUX):
-    """ update ux images on the screen"""
-    if gameState.state == 'newgame':
-        gameDisplay.blit(gameSettings.bg_image,(0,0))
-        for n in newgameUX:
-            n.blit_self()
-    elif gameState.state == 'gameover':
-        for g in gameoverUX:
-            g.blit_self()
+def newgame(gameSettings,gameDisplay,newgameUX):
+    """ methods for newgame state"""
+    gameDisplay.blit(gameSettings.bg_image,(0,0))
+    for n in newgameUX:
+        n.blit_self()
+
+    pg.display.update()
+
+def gameover(gameSettings,gameDisplay,gameoverUX):
+    """ methods for gameover state"""
+    gameDisplay.blit(gameSettings.bg_image,(0,0))
+    for g in gameoverUX:
+        g.blit_self()
 
     pg.display.update()

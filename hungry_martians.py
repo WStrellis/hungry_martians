@@ -56,29 +56,30 @@ def run_game():
     #create a group for the bullets
     bullets = pg.sprite.Group()
 
-    class GameState():
-        def __init__(self):
-            self.state = "newgame"
-
-
-    gameState = GameState()
-
     while True:
 
-        gameFunc.check_events(player, play_button, gameState)
-        if gameState.state == "running":
+        gameFunc.check_events(player, play_button, gameSettings)
+
+        if gameSettings.state == "newgame":
+            gameFunc.newgame(gameSettings,gameDisplay,newgameUX)
+
+        if gameSettings.state == 'level':
+            pass
+
+        if gameSettings.state == "running":
             gameFunc.player_movement(player)
             player.move_self()
             cow.move_self()
             gameFunc.move_farmers(farmers)
             gameFunc.farmer_shoot(farmers,gameDisplay,bullets)
             gameFunc.move_bullet(bullets)
-            gameFunc.ship_hit(player,bullets,shield_indicator)
-            if player.hp < 0:
-                gameState.state = "gameover"
+            gameFunc.ship_hit(player,bullets,shield_indicator, gameSettings)
             gameFunc.update_characters(gameSettings,gameDisplay,player,cow,farmers,bullets,shield_indicator)
-        else:
-            gameFunc.update_UX(gameSettings,gameDisplay,gameState,newgameUX,gameoverUX)
+
+
+        if gameSettings.state == "gameover":
+            gameFunc.gameover(gameSettings,gameDisplay,gameoverUX)
+
 
         clock.tick(FPS) #limit fps to 30
 
