@@ -5,7 +5,7 @@ from pygame.locals import *
 
 def init_stats(settings, ship, shield):
     """ reset everything to the start value"""
-    settings.level = 0
+    settings.level = 1
     ship.hp = 3
     shield.setImage(ship.hp)
 
@@ -51,7 +51,7 @@ def player_movement(player):
     if player.moving_left == True: 
         player.move_self()
 
-def check_events(player,settings,ngUX,goUX, shield):
+def check_events(player,settings,ngUX,goUX, shield, lvlUX):
     """Respond to key presses and events"""
     for event in pg.event.get():
         if event.type == QUIT or (event.type== KEYDOWN and event.key == K_ESCAPE):
@@ -81,25 +81,37 @@ def check_events(player,settings,ngUX,goUX, shield):
                     playGame(mouse_x,mouse_y,settings, playButton,quitButton)
 
                 if settings.state == 'gameover':
-                    resetButton = ngUX[1]
-                    quitButton = ngUX[2]
+                    resetButton = goUX[1]
+                    quitButton = goUX[2]
                     resetGame(mouse_x,mouse_y,settings, resetButton,quitButton, player, shield)
 
                 if settings.state == 'level':
-                    pass
+                    huntButton = lvlUX[1]
+                    startLevel(mouse_x,mouse_y,settings, huntButton)
 
-def playGame(mouse_x, mouse_y, gameState, play_button,quit_button):
+def playGame(mouse_x, mouse_y, settings, play_button,quit_button):
     """ start the game if the player clicks the mouse button"""
     if play_button.rect.collidepoint(mouse_x,mouse_y):
-        gameState.state = "running"
+        print("before reset: " +  settings.state)
+        settings.state = "level"
+        print("after reset: " +  settings.state)
     if quit_button.rect.collidepoint(mouse_x,mouse_y):
       quitGame() 
 
-def resetGame(mouse_x, mouse_y, gameState, reset_button,quit_button, player,shield):
+def startLevel(mouse_x, mouse_y, settings, hunt_button):
+    """ start the round if the player clicks the mouse button"""
+    if hunt_button.rect.collidepoint(mouse_x,mouse_y):
+        print("before reset: " +  settings.state)
+        settings.state = "running"
+        print("after reset: " +  settings.state)
+
+def resetGame(mouse_x, mouse_y, settings, reset_button,quit_button, player,shield):
     """ reset game settings to initial values"""
     if reset_button.rect.collidepoint(mouse_x,mouse_y):
-        init_stats(gameState, player,shield)
-        gameState.state = "running"
+        init_stats(settings, player,shield)
+        print("before reset: " +  settings.state)
+        settings.state = "level"
+        print("after reset: " +  settings.state)
     if quit_button.rect.collidepoint(mouse_x,mouse_y):
       quitGame() 
 
@@ -128,6 +140,14 @@ def newgame(gameSettings,gameDisplay,newgameUX):
     gameDisplay.blit(gameSettings.bg_image,(0,0))
     for n in newgameUX:
         n.blit_self()
+
+    pg.display.update()
+
+def levelIntro(gameSettings,gameDisplay, lvlUX):
+    """ methods for newgame state"""
+    gameDisplay.blit(gameSettings.bg_image,(0,0))
+    for i in lvlUX:
+        i.blit_self()
 
     pg.display.update()
 

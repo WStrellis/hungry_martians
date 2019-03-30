@@ -1,11 +1,12 @@
 #!python3
 
 import pygame as pg
+import pygame.font
 
 class UXcomponent(pg.sprite.Sprite):
     """A class to manage the menus"""
 
-    def __init__(self,display,image,centerx, bottom):
+    def __init__(self, display, image, width, height, centerx, bottom):
         super().__init__()
         """initialize game settings"""
         #game display
@@ -17,7 +18,7 @@ class UXcomponent(pg.sprite.Sprite):
 
      # rect size
         # self.rect = self.image.get_rect()
-        self.rect = pg.Rect(0,0, 173,159)
+        self.rect = pg.Rect(0,0, width, height)
 
         #set starting position
         self.rect.centerx = centerx
@@ -29,8 +30,8 @@ class UXcomponent(pg.sprite.Sprite):
 
 class ShieldIcon(UXcomponent):
     """ a class for the shield indicator"""
-    def __init__(self,display,image,centerx,bottom):
-        super().__init__(display,image,centerx,bottom)
+    def __init__(self,display,image, width, height, centerx,bottom):
+        super().__init__(display,image, width, height, centerx,bottom)
 
     def setImage(self,ship_hp):
         """ change the shield color based on ship hp"""
@@ -43,3 +44,12 @@ class ShieldIcon(UXcomponent):
         }
         if ship_hp >= 0 :
             self.image = pg.image.load(shields[tag])
+
+class Text(UXcomponent):
+    """ A class for displaying text on the screen"""
+
+    def __init__(self,display,image, width, height, centerx, bottom, msg):
+        super().__init__(display,image, width, height, centerx, bottom)
+
+        self.font = pg.font.SysFont(None, 48)
+        self.msg = msg

@@ -7,7 +7,7 @@ from hm_ship import Ship
 from hm_cow import Cow
 from hm_farmer import Farmer
 from hm_bullets import Bullet
-from hm_ux import UXcomponent,ShieldIcon
+from hm_ux import UXcomponent,ShieldIcon, Text
 from pygame.locals import *
 
 def run_game():
@@ -26,16 +26,22 @@ def run_game():
     pg.display.set_caption("Hungry Martians")
 
     # ux components
-    shield_indicator = ShieldIcon(gameDisplay,gameSettings.green_shield,125,175)
+    shield_indicator = ShieldIcon(gameDisplay,gameSettings.green_shield,31, 35, 35, 75)
 
-    title = UXcomponent(gameDisplay,gameSettings.title,330,340)
+    title = UXcomponent(gameDisplay,gameSettings.title, 513, 141, 500,340)
 
-    play_button = UXcomponent(gameDisplay,gameSettings.playButton,500,500)
-    restart_button = UXcomponent(gameDisplay,gameSettings.restartButton,500,500)
-    quit_button = UXcomponent(gameDisplay,gameSettings.quitButton,500,700)
+    play_button = UXcomponent(gameDisplay,gameSettings.playButton, 173, 159,500,500)
+    restart_button = UXcomponent(gameDisplay,gameSettings.restartButton, 173, 159,500,500)
+    quit_button = UXcomponent(gameDisplay,gameSettings.quitButton, 173, 159, 500, 700)
+    
+    level_heading = Text(gameDisplay,None, 800, 300, 500, 300, "Farm {0}".format(gameSettings.level))
+    hunt_button = UXcomponent(gameDisplay,gameSettings.huntButton, 173, 159,500,500)
 
     # group for new game menu components
     newgameUX = [title,play_button, quit_button]
+    
+    # group for new level screen components
+    levelUX = [level_heading, hunt_button]
 
     # group for game over menu components
     gameoverUX = [title,restart_button, quit_button]
@@ -59,14 +65,13 @@ def run_game():
 
     while True:
 
-        gameFunc.check_events(player,gameSettings,newgameUX,gameoverUX, shield_indicator)
+        gameFunc.check_events(player,gameSettings,newgameUX,gameoverUX, shield_indicator, levelUX)
 
         if gameSettings.state == "newgame":
             gameFunc.newgame(gameSettings,gameDisplay,newgameUX)
-            # gameFunc.init_stats(gameSettings,player)
 
         if gameSettings.state == 'level':
-            pass
+            gameFunc.levelIntro(gameSettings,gameDisplay,levelUX)
 
         if gameSettings.state == "running":
             gameFunc.player_movement(player)
