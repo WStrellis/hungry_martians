@@ -99,7 +99,7 @@ def resetGame(mouse_x, mouse_y, gameState, reset_button,quit_button, player,shie
     """ reset game settings to initial values"""
     if reset_button.rect.collidepoint(mouse_x,mouse_y):
         init_stats(gameState, player,shield)
-        gameState.state = "newgame"
+        gameState.state = "running"
     if quit_button.rect.collidepoint(mouse_x,mouse_y):
       quitGame() 
 
