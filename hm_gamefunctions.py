@@ -2,6 +2,7 @@
 
 import sys, pygame as pg
 from pygame.locals import *
+from hm_ux import Text
 
 def init_stats(settings, ship, shield):
     """ reset everything to the start value"""
@@ -91,28 +92,25 @@ def check_events(player,settings,ngUX,goUX, shield, lvlUX):
 
 def playGame(mouse_x, mouse_y, settings, play_button,quit_button):
     """ start the game if the player clicks the mouse button"""
-    if play_button.rect.collidepoint(mouse_x,mouse_y):
-        print("before reset: " +  settings.state)
+    if play_button.rect.collidepoint(mouse_x,mouse_y) and play_button.onscreen == True:
         settings.state = "level"
-        print("after reset: " +  settings.state)
-    if quit_button.rect.collidepoint(mouse_x,mouse_y):
+        play_button.onscreen = False
+    if quit_button.rect.collidepoint(mouse_x,mouse_y) and quit_button.onscreen == True:
       quitGame() 
 
 def startLevel(mouse_x, mouse_y, settings, hunt_button):
     """ start the round if the player clicks the mouse button"""
-    if hunt_button.rect.collidepoint(mouse_x,mouse_y):
-        print("before reset: " +  settings.state)
+    if hunt_button.rect.collidepoint(mouse_x,mouse_y) and hunt_button.onscreen == True:
         settings.state = "running"
-        print("after reset: " +  settings.state)
+        hunt_button.onscreen = False
 
 def resetGame(mouse_x, mouse_y, settings, reset_button,quit_button, player,shield):
     """ reset game settings to initial values"""
-    if reset_button.rect.collidepoint(mouse_x,mouse_y):
+    if reset_button.rect.collidepoint(mouse_x,mouse_y) and reset_button.onscreen == True:
         init_stats(settings, player,shield)
-        print("before reset: " +  settings.state)
         settings.state = "level"
-        print("after reset: " +  settings.state)
-    if quit_button.rect.collidepoint(mouse_x,mouse_y):
+        reset_button.onscreen = False
+    if quit_button.rect.collidepoint(mouse_x,mouse_y) and quit_button.onscreen == True:
       quitGame() 
 
 
@@ -147,6 +145,9 @@ def levelIntro(gameSettings,gameDisplay, lvlUX):
     """ methods for newgame state"""
     gameDisplay.blit(gameSettings.bg_image,(0,0))
     for i in lvlUX:
+        if isinstance(i, Text):
+            currLVL = gameSettings.currentLVL()
+            i.msg = currLVL
         i.blit_self()
 
     pg.display.update()

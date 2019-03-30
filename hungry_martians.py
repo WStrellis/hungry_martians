@@ -33,8 +33,10 @@ def run_game():
     play_button = UXcomponent(gameDisplay,gameSettings.playButton, 173, 159,500,500)
     restart_button = UXcomponent(gameDisplay,gameSettings.restartButton, 173, 159,500,500)
     quit_button = UXcomponent(gameDisplay,gameSettings.quitButton, 173, 159, 500, 700)
-    
-    level_heading = Text(gameDisplay,None, 800, 300, 500, 300, "Farm {0}".format(gameSettings.level))
+
+   #set the text for level heading 
+    currLVL = gameSettings.currentLVL()
+    level_heading = Text(gameDisplay, 120, 500, 340, gameSettings.light_orange, currLVL)
     hunt_button = UXcomponent(gameDisplay,gameSettings.huntButton, 173, 159,500,500)
 
     # group for new game menu components

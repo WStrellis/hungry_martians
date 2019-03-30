@@ -32,6 +32,9 @@ class Settings():
         self.bullet_img = pg.image.load("D:/Python/hungry_martians/hm_bullet.png")
 
         # ux components
+        self.bright_green = (61, 235, 98) 
+        self.light_orange = (255, 106, 54)
+
         self.title = pg.image.load("D:/Python/hungry_martians/title.png")
 
         self.playButton = pg.image.load("D:/Python/hungry_martians/play_button.png")
@@ -40,3 +43,8 @@ class Settings():
         self.huntButton = pg.image.load("D:/Python/hungry_martians/hunt_button.png")
 
         self.green_shield = pg.image.load("D:/Python/hungry_martians/green_shield.png")
+
+    def currentLVL(self):
+        """ update the level message"""
+        msg = "Farm {0}".format(self.level)
+        return msg
