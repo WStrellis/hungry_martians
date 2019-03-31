@@ -49,21 +49,21 @@ def run_game():
     gameoverUX = [title,restart_button, quit_button]
 
     # create the player
-    player = Ship(gameDisplay,500,200,False,False,10,3)
+    player = Ship(gameDisplay, 500, 200, 0, 0, 10, 3)
     print(player.rect.left)
     print(player.rect.right)
     tractorBeam = TBeam(gameDisplay, player.rect.centerx, player.rect.bottom, 10)
 
 	# create cows
-    cow1 = Cow(gameDisplay, 300, 750, True, False,5 )
-    cow2 = Cow(gameDisplay, 500, 750, False, True,5 )
+    cow1 = Cow(gameDisplay, 300, 750, 1, 0,5 )
+    cow2 = Cow(gameDisplay, 500, 750, 0, 1,5 )
 
     #create a group for all animals
     gameSettings.animals.add([cow1,cow2])
 
     #create farmers
-    farmer1 = Farmer(gameDisplay, 300, 750,True, False, 3, 12)
-    farmer2 = Farmer(gameDisplay, 600, 750, False,True, 3, 17)
+    farmer1 = Farmer(gameDisplay, 300, 750, 1, 0, 3, 12)
+    farmer2 = Farmer(gameDisplay, 600, 750, 0, 1, 3, 17)
 
     #create a group for the farmers
     farmers = pg.sprite.Group()
