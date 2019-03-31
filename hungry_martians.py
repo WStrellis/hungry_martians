@@ -50,10 +50,16 @@ def run_game():
 
     # create the player
     player = Ship(gameDisplay,500,200,False,False,10,3)
+    print(player.rect.left)
+    print(player.rect.right)
     tractorBeam = TBeam(gameDisplay, player.rect.centerx, player.rect.bottom, 10)
 
 	# create cows
-    cow = Cow(gameDisplay, 500, 750, False, True,5 )
+    cow1 = Cow(gameDisplay, 300, 750, True, False,5 )
+    cow2 = Cow(gameDisplay, 500, 750, False, True,5 )
+
+    #create a group for all animals
+    gameSettings.animals.add([cow1,cow2])
 
     #create farmers
     farmer1 = Farmer(gameDisplay, 300, 750,True, False, 3, 12)
@@ -68,7 +74,7 @@ def run_game():
 
     while True:
 
-        gameFunc.check_events(player,gameSettings,newgameUX,gameoverUX, shield_indicator, levelUX, tractorBeam)
+        gameFunc.check_events(player,gameSettings,newgameUX,gameoverUX, shield_indicator, levelUX, tractorBeam )
 
         if gameSettings.state == "newgame":
             gameFunc.newgame(gameSettings,gameDisplay,newgameUX)
@@ -79,12 +85,13 @@ def run_game():
         if gameSettings.state == "running":
             gameFunc.player_movement(player)
             player.move_self()
-            cow.move_self()
             gameFunc.move_farmers(farmers)
+            gameFunc.move_animals(gameSettings.animals)
             gameFunc.farmer_shoot(farmers,gameDisplay,bullets)
             gameFunc.move_bullet(bullets)
             gameFunc.ship_hit(player,bullets,shield_indicator, gameSettings)
-            gameFunc.update_characters(gameSettings,gameDisplay,player,cow,farmers,bullets,shield_indicator, tractorBeam)
+            gameFunc.update_characters(gameSettings, gameDisplay, player, farmers, bullets, shield_indicator, tractorBeam)
+            player.chargeBeam()
 
 
         if gameSettings.state == "gameover":

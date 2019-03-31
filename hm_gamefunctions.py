@@ -10,10 +10,21 @@ def init_stats(settings, ship, shield):
     ship.hp = 3
     shield.setImage(ship.hp)
 
+def levelComplete(settings):
+    """ if all animals are captured go the the next level"""
+    if len(settings.animals) == len(settings.captured):
+        settings.state = "level"
+
 def move_farmers(farmers):
     """ move each farmer"""
     for f in farmers:
         f.move_self()
+
+def move_animals(animals):
+    """ move each cow"""
+    for a in animals:
+        if a.rect.bottom >550:
+            a.move_self()
 
 def farmer_shoot(farmers,display,bullets):
     """ call shoot for each farmer"""
@@ -43,6 +54,13 @@ def ship_hit(ship,bullets,shield, gameState):
             b.kill()
         if ship.hp < 0:
                 gameState.state = "gameover"
+    
+def animals_hit(beam, settings):
+    """ determine if animals have been shot by the laser"""
+    animalsHit = pg.sprite.spritecollide(beam, settings.animals, False)
+    for a in animalsHit:
+        a.captured = True
+        settings.captured.append(a)
 
 
 def player_movement(player):
@@ -66,6 +84,8 @@ def check_events(player,settings,ngUX,goUX, shield, lvlUX, tb):
                 player.moving_left = True
             if event.key == K_SPACE and player.charged == True:
                 player.fire_tb(tb)
+                animals_hit(tb, settings)
+                levelComplete(settings)
 
         elif event.type == KEYUP :
             if event.key == K_RIGHT: 
@@ -121,14 +141,16 @@ def quitGame():
     pg.quit()
     sys.exit()
 
-def update_characters(gameSettings, gameDisplay, player,cow,farmers,bullets,shield,tb):
+def update_characters(gameSettings, gameDisplay, player, farmers,bullets,shield,tb):
     """ update images on the screen and draw new screen"""
     gameDisplay.fill(gameSettings.bg_color)
     gameDisplay.blit(gameSettings.bg_image,(0,0))
     player.blit_self()
     for f in farmers:
         f.blit_self()
-    cow.blit_self()
+    for a in gameSettings.animals:
+        if a.rect.bottom > 550:
+            a.blit_self()
     # used to control how long the tb is displayed on the screen
     if tb.lifespan > 0:
         tb.blit_self()

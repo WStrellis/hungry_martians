@@ -17,21 +17,34 @@ class Ship(Character):
         self.hp = hp
 
         # attributes to track tractor beam status
+        # the player can't fire the beam if charged is false
         self.charged = True
-        self.tb_timer = 0
+        self.chargingTimer = 0
 
-    def fire_tb(self,tb):
+    def fire_tb(self, tb):
         """ shoot the tractor beam"""
 
         #change the image of the ship to 'charging'
+         
         self.image = self.ufo_reloading
-        self.tb_timer = 90
-        # self.charged = False
+        # set charging timer to 3 seconds
+        self.chargingTimer = 90
+        self.charged = False
 
         # center tb under ship
         tb.rect.centerx = self.rect.centerx
+
         # set tractor beam lifespan to 15
         tb.lifespan = tb.maxlife
+
+    
+    def chargeBeam(self):
+        """ reduce tb_timer by 1 each time though the game loop"""
+        if self.chargingTimer > 0:
+            self.chargingTimer -= 1
+        else:
+            self.image = self.ufo_charged
+            self.charged = True
 
 class TBeam(pg.sprite.Sprite):
     """ class to make tracor beams"""

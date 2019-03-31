@@ -20,18 +20,11 @@ class Settings():
         # level tracker
         self.level = 1
 
-        #character images
-        self.ufo_charged = pg.image.load("D:/Python/hungry_martians/alien_ship_charged.png")
-        self.ufo_reloading = pg.image.load("D:/Python/hungry_martians/alien_ship_reloading.png")
-        self.tractorBeamImg = pg.image.load("D:/Python/hungry_martians/tractor_beam.png")
+        # group for all animals
+        self.animals = pg.sprite.Group()
 
-        self.cow_left = pg.image.load("D:/Python/hungry_martians/cow_left.png")
-        self.cow_right = pg.image.load("D:/Python/hungry_martians/cow_right.png")
-
-        self.farmer_left = pg.image.load("D:/Python/hungry_martians/farmer_left.png")
-        self.farmer_right = pg.image.load("D:/Python/hungry_martians/farmer_right.png")
-
-        self.bullet_img = pg.image.load("D:/Python/hungry_martians/hm_bullet.png")
+        #used to track captured animals
+        self.captured = []
 
         # ux components
         self.bright_green = (61, 235, 98) 
