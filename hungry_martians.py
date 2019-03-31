@@ -3,7 +3,7 @@
 import pygame as pg, hm_gamefunctions as gameFunc
 
 from hm_settings import Settings
-from hm_ship import Ship
+from hm_ship import Ship, TBeam
 from hm_cow import Cow
 from hm_farmer import Farmer
 from hm_bullets import Bullet
@@ -49,14 +49,15 @@ def run_game():
     gameoverUX = [title,restart_button, quit_button]
 
     # create the player
-    player = Ship(gameDisplay,gameSettings.ufo,500,200,False,False,10,3)
+    player = Ship(gameDisplay,500,200,False,False,10,3)
+    tractorBeam = TBeam(gameDisplay, player.rect.centerx, player.rect.bottom, 10)
 
 	# create cows
-    cow = Cow(gameDisplay,gameSettings.cow_left,500,750,False,True,5, gameSettings.cow_left, gameSettings.cow_right)
+    cow = Cow(gameDisplay, 500, 750, False, True,5 )
 
     #create farmers
-    farmer1 = Farmer(gameDisplay,gameSettings.farmer_left,300,750,True,False, 3, gameSettings.farmer_left, gameSettings.farmer_right, 12)
-    farmer2 = Farmer(gameDisplay,gameSettings.farmer_right,600,750,False,True, 3, gameSettings.farmer_left, gameSettings.farmer_right, 17)
+    farmer1 = Farmer(gameDisplay, 300, 750,True, False, 3, 12)
+    farmer2 = Farmer(gameDisplay, 600, 750, False,True, 3, 17)
 
     #create a group for the farmers
     farmers = pg.sprite.Group()
@@ -67,7 +68,7 @@ def run_game():
 
     while True:
 
-        gameFunc.check_events(player,gameSettings,newgameUX,gameoverUX, shield_indicator, levelUX)
+        gameFunc.check_events(player,gameSettings,newgameUX,gameoverUX, shield_indicator, levelUX, tractorBeam)
 
         if gameSettings.state == "newgame":
             gameFunc.newgame(gameSettings,gameDisplay,newgameUX)
@@ -83,7 +84,7 @@ def run_game():
             gameFunc.farmer_shoot(farmers,gameDisplay,bullets)
             gameFunc.move_bullet(bullets)
             gameFunc.ship_hit(player,bullets,shield_indicator, gameSettings)
-            gameFunc.update_characters(gameSettings,gameDisplay,player,cow,farmers,bullets,shield_indicator)
+            gameFunc.update_characters(gameSettings,gameDisplay,player,cow,farmers,bullets,shield_indicator, tractorBeam)
 
 
         if gameSettings.state == "gameover":

@@ -1,14 +1,14 @@
 #!python3
 
+import pygame as pg
 from hm_characters import Character
-from hm_settings import Settings
 
 class Bullet(Character):
-    # used to access the bullet image
-    gs = Settings()
-    """ a class for the player's ship"""
-    def __init__(self, display, image, centerx, bottom, moving_left, moving_right, speed):
-        super().__init__(display, image, centerx, bottom, moving_left, moving_right, speed)
+    """ a class for bullets"""
+    def __init__(self, display, centerx, bottom, moving_left, moving_right, speed):
+        super().__init__(display, centerx, bottom, moving_left, moving_right, speed)
+
+        self.image = pg.image.load("D:/Python/hungry_martians/hm_bullet.png")
 
     def move_self(self):
         """move the bullet"""

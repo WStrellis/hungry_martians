@@ -21,7 +21,9 @@ class Settings():
         self.level = 1
 
         #character images
-        self.ufo = pg.image.load("D:/Python/hungry_martians/alien_ship.png")
+        self.ufo_charged = pg.image.load("D:/Python/hungry_martians/alien_ship_charged.png")
+        self.ufo_reloading = pg.image.load("D:/Python/hungry_martians/alien_ship_reloading.png")
+        self.tractorBeamImg = pg.image.load("D:/Python/hungry_martians/tractor_beam.png")
 
         self.cow_left = pg.image.load("D:/Python/hungry_martians/cow_left.png")
         self.cow_right = pg.image.load("D:/Python/hungry_martians/cow_right.png")

@@ -52,7 +52,7 @@ def player_movement(player):
     if player.moving_left == True: 
         player.move_self()
 
-def check_events(player,settings,ngUX,goUX, shield, lvlUX):
+def check_events(player,settings,ngUX,goUX, shield, lvlUX, tb):
     """Respond to key presses and events"""
     for event in pg.event.get():
         if event.type == QUIT or (event.type== KEYDOWN and event.key == K_ESCAPE):
@@ -64,6 +64,8 @@ def check_events(player,settings,ngUX,goUX, shield, lvlUX):
                 player.moving_right = True
             if event.key == K_LEFT:
                 player.moving_left = True
+            if event.key == K_SPACE and player.charged == True:
+                player.fire_tb(tb)
 
         elif event.type == KEYUP :
             if event.key == K_RIGHT: 
@@ -119,7 +121,7 @@ def quitGame():
     pg.quit()
     sys.exit()
 
-def update_characters(gameSettings, gameDisplay, player,cow,farmers,bullets,shield):
+def update_characters(gameSettings, gameDisplay, player,cow,farmers,bullets,shield,tb):
     """ update images on the screen and draw new screen"""
     gameDisplay.fill(gameSettings.bg_color)
     gameDisplay.blit(gameSettings.bg_image,(0,0))
@@ -127,6 +129,9 @@ def update_characters(gameSettings, gameDisplay, player,cow,farmers,bullets,shie
     for f in farmers:
         f.blit_self()
     cow.blit_self()
+    # used to control how long the tb is displayed on the screen
+    if tb.lifespan > 0:
+        tb.blit_self()
     for b in bullets:
         b.blit_self()
     shield.blit_self()
