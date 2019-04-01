@@ -34,16 +34,24 @@ def run_game():
     restart_button = UXcomponent(gameDisplay,gameSettings.restartButton, 173, 159,500,500)
     quit_button = UXcomponent(gameDisplay,gameSettings.quitButton, 173, 159, 500, 700)
 
-   #set the text for level heading 
+   # start level screen components
     currLVL = gameSettings.currentLVL()
     level_heading = Text(gameDisplay, 120, 500, 340, gameSettings.light_orange, currLVL)
     hunt_button = UXcomponent(gameDisplay,gameSettings.huntButton, 173, 159,500,500)
 
+   # end level screen components
+    goodJob = Text(gameDisplay, 120, 500, 240, gameSettings.light_orange, "Good Job!")
+    endMsg = Text(gameDisplay, 120, 500, 340, gameSettings.light_orange, "All animals abducted!")
+    next_button = UXcomponent(gameDisplay, gameSettings.nextButton, 173, 159,500,500)
+
     # group for new game menu components
     newgameUX = [title,play_button, quit_button]
     
-    # group for new level screen components
-    levelUX = [level_heading, hunt_button]
+    # group for start level screen components
+    startUX = [level_heading, hunt_button]
+
+    # group for start level screen components
+    endUX = [goodJob, endMsg, next_button]
 
     # group for game over menu components
     gameoverUX = [title,restart_button, quit_button]
@@ -74,13 +82,13 @@ def run_game():
 
     while True:
 
-        gameFunc.check_events(player,gameSettings,newgameUX,gameoverUX, shield_indicator, levelUX, tractorBeam )
+        gameFunc.check_events(player,gameSettings,newgameUX,gameoverUX, shield_indicator, startUX, endUX, tractorBeam )
 
         if gameSettings.state == "newgame":
             gameFunc.newgame(gameSettings,gameDisplay,newgameUX)
 
-        if gameSettings.state == 'level':
-            gameFunc.levelIntro(gameSettings,gameDisplay,levelUX)
+        if gameSettings.state == 'startLevel':
+            gameFunc.startLevel(gameSettings,gameDisplay,startUX)
 
         if gameSettings.state == "running":
             gameFunc.player_movement(player)
@@ -93,6 +101,8 @@ def run_game():
             gameFunc.update_characters(gameSettings, gameDisplay, player, farmers, bullets, shield_indicator, tractorBeam)
             player.chargeBeam()
 
+        if gameSettings.state == "endLevel":
+            gameFunc.endLevel(gameSettings,gameDisplay,endUX)
 
         if gameSettings.state == "gameover":
             gameFunc.gameover(gameSettings,gameDisplay,gameoverUX)

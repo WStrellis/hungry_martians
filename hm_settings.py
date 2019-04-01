@@ -24,7 +24,7 @@ class Settings():
         self.animals = pg.sprite.Group()
 
         #used to track captured animals
-        self.captured = []
+        self.captured = 0 
 
         # ux components
         self.bright_green = (61, 235, 98) 
@@ -34,10 +34,13 @@ class Settings():
 
         self.playButton = pg.image.load("D:/Python/hungry_martians/play_button.png")
         self.quitButton = pg.image.load("D:/Python/hungry_martians/quit_button.png")
+        self.nextButton = pg.image.load("D:/Python/hungry_martians/next_button.png")
         self.restartButton = pg.image.load("D:/Python/hungry_martians/restart_button.png")
         self.huntButton = pg.image.load("D:/Python/hungry_martians/hunt_button.png")
 
         self.green_shield = pg.image.load("D:/Python/hungry_martians/green_shield.png")
+    
+        
 
     def currentLVL(self):
         """ update the level message"""

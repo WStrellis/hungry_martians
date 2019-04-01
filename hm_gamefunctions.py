@@ -8,12 +8,15 @@ def init_stats(settings, ship, shield):
     """ reset everything to the start value"""
     settings.level = 1
     ship.hp = 3
+    settings.captured = 0
+    settings.state = "startLevel"
     shield.setImage(ship.hp)
 
 def levelComplete(settings):
     """ if all animals are captured go the the next level"""
-    if len(settings.animals) == len(settings.captured):
-        settings.state = "level"
+    if len(settings.animals) == settings.captured:
+        settings.state = "endLevel"
+        settings.level += 1
 
 def move_farmers(farmers):
     """ move each farmer"""
@@ -60,7 +63,7 @@ def animals_hit(beam, settings):
     animalsHit = pg.sprite.spritecollide(beam, settings.animals, False)
     for a in animalsHit:
         a.captured = True
-        settings.captured.append(a)
+        settings.captured += 1
 
 
 def player_movement(player):
@@ -70,7 +73,7 @@ def player_movement(player):
     if player.moving_left == True: 
         player.move_self()
 
-def check_events(player,settings,ngUX,goUX, shield, lvlUX, tb):
+def check_events(player,settings,ngUX,goUX, shield, startUX, endUX, tb):
     """Respond to key presses and events"""
     for event in pg.event.get():
         if event.type == QUIT or (event.type== KEYDOWN and event.key == K_ESCAPE):
@@ -94,7 +97,7 @@ def check_events(player,settings,ngUX,goUX, shield, lvlUX, tb):
                 player.moving_left = False
 
         #start the game when the player clicks "play"
-        if settings.state in ['newgame','gameover','level']:
+        if settings.state in ['newgame','gameover','startLevel', 'endLevel']:
             if event.type == MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pg.mouse.get_pos()
 
@@ -108,29 +111,38 @@ def check_events(player,settings,ngUX,goUX, shield, lvlUX, tb):
                     quitButton = goUX[2]
                     resetGame(mouse_x,mouse_y,settings, resetButton,quitButton, player, shield)
 
-                if settings.state == 'level':
-                    huntButton = lvlUX[1]
-                    startLevel(mouse_x,mouse_y,settings, huntButton)
+                if settings.state == 'startLevel':
+                    huntButton = startUX[1]
+                    startEvents(mouse_x,mouse_y,settings, huntButton)
+
+                if settings.state == 'endLevel':
+                    nextButton = endUX[2]
+                    loadNext(mouse_x,mouse_y,settings, nextButton)
 
 def playGame(mouse_x, mouse_y, settings, play_button,quit_button):
     """ start the game if the player clicks the mouse button"""
     if play_button.rect.collidepoint(mouse_x,mouse_y) and play_button.onscreen == True:
-        settings.state = "level"
+        settings.state = "startLevel"
         play_button.onscreen = False
     if quit_button.rect.collidepoint(mouse_x,mouse_y) and quit_button.onscreen == True:
       quitGame() 
 
-def startLevel(mouse_x, mouse_y, settings, hunt_button):
+def startEvents(mouse_x, mouse_y, settings, hunt_button):
     """ start the round if the player clicks the mouse button"""
     if hunt_button.rect.collidepoint(mouse_x,mouse_y) and hunt_button.onscreen == True:
         settings.state = "running"
         hunt_button.onscreen = False
 
+def loadNext(mouse_x, mouse_y, settings, next_button):
+    """ start the round if the player clicks the mouse button"""
+    if next_button.rect.collidepoint(mouse_x,mouse_y) and next_button.onscreen == True:
+        settings.state = "startLevel"
+        next_button.onscreen = False
+
 def resetGame(mouse_x, mouse_y, settings, reset_button,quit_button, player,shield):
     """ reset game settings to initial values"""
     if reset_button.rect.collidepoint(mouse_x,mouse_y) and reset_button.onscreen == True:
         init_stats(settings, player,shield)
-        settings.state = "level"
         reset_button.onscreen = False
     if quit_button.rect.collidepoint(mouse_x,mouse_y) and quit_button.onscreen == True:
       quitGame() 
@@ -168,13 +180,25 @@ def newgame(gameSettings,gameDisplay,newgameUX):
 
     pg.display.update()
 
-def levelIntro(gameSettings,gameDisplay, lvlUX):
-    """ methods for newgame state"""
+def startLevel(gameSettings,gameDisplay, startUX):
+    """ methods for start level state"""
     gameDisplay.blit(gameSettings.bg_image,(0,0))
-    for i in lvlUX:
-        if isinstance(i, Text):
-            currLVL = gameSettings.currentLVL()
-            i.msg = currLVL
+
+    #update the level number
+    currLVL = "Farm {0}".format(gameSettings.level)
+    print(gameSettings.level)
+    # startUX[0].msg = "Farm {0}".format(gameSettings.level)
+    startUX[0].msg = currLVL
+
+    for i in startUX:
+        i.blit_self()
+
+    pg.display.update()
+
+def endLevel(gameSettings,gameDisplay, endUX):
+    """ methods for end level state"""
+    gameDisplay.blit(gameSettings.bg_image,(0,0))
+    for i in endUX:
         i.blit_self()
 
     pg.display.update()
