@@ -4,13 +4,13 @@ import sys, pygame as pg
 from pygame.locals import *
 from hm_ux import Text
 
-def init_stats(settings, ship, shield):
+def init_stats(settings, ship):
     """ reset everything to the start value"""
     settings.level = 1
     ship.hp = 3
     settings.captured = 0
     settings.state = "startLevel"
-    shield.setImage(ship.hp)
+    settings.shield_indicator.setImage(ship.hp)
 
 def levelComplete(settings):
     """ if all animals are captured go the the next level"""
@@ -45,18 +45,18 @@ def move_bullet(bullets):
         if b.rect[1] <= 0:
             bullets.remove(b)
 
-def ship_hit(ship,bullets,shield, gameState):
+def ship_hit(ship, bullets, settings):
     """ Check if the player's ship has been hit by farmer's bullets"""
     if pg.sprite.spritecollideany(ship,bullets):
         # subtract 1 hp from the ship
         ship.hp -= 1
         # update the shield icon
-        shield.setImage(ship.hp)
+        settings.shield_indicator.setImage(ship.hp)
         #delete all bullets
         for b in bullets.copy():
             b.kill()
         if ship.hp < 0:
-                gameState.state = "gameover"
+                settings.state = "gameover"
     
 def animals_hit(beam, settings):
     """ determine if animals have been shot by the laser"""
@@ -73,7 +73,7 @@ def player_movement(player):
     if player.moving_left == True: 
         player.move_self()
 
-def check_events(player,settings,ngUX,goUX, shield, startUX, endUX, tb):
+def check_events(player, settings, tb):
     """Respond to key presses and events"""
     for event in pg.event.get():
         if event.type == QUIT or (event.type== KEYDOWN and event.key == K_ESCAPE):
@@ -102,49 +102,47 @@ def check_events(player,settings,ngUX,goUX, shield, startUX, endUX, tb):
                 mouse_x, mouse_y = pg.mouse.get_pos()
 
                 if settings.state == 'newgame':
-                    playButton = ngUX[1]
-                    quitButton = ngUX[2]
-                    playGame(mouse_x,mouse_y,settings, playButton,quitButton)
+                    playGame(mouse_x,mouse_y,settings)
 
                 if settings.state == 'gameover':
-                    resetButton = goUX[1]
-                    quitButton = goUX[2]
-                    resetGame(mouse_x,mouse_y,settings, resetButton,quitButton, player, shield)
+                    resetGame(mouse_x,mouse_y,settings, player)
 
                 if settings.state == 'startLevel':
-                    huntButton = startUX[1]
-                    startEvents(mouse_x,mouse_y,settings, huntButton)
+                    startEvents(mouse_x,mouse_y,settings )
 
                 if settings.state == 'endLevel':
-                    nextButton = endUX[2]
-                    loadNext(mouse_x,mouse_y,settings, nextButton)
+                    loadNext(mouse_x,mouse_y,settings)
 
-def playGame(mouse_x, mouse_y, settings, play_button,quit_button):
+def playGame(mouse_x, mouse_y, settings):
     """ start the game if the player clicks the mouse button"""
-    if play_button.rect.collidepoint(mouse_x,mouse_y) and play_button.onscreen == True:
+    if settings.playButton.rect.collidepoint(mouse_x,mouse_y) and settings.playButton.onscreen == True:
         settings.state = "startLevel"
-        play_button.onscreen = False
-    if quit_button.rect.collidepoint(mouse_x,mouse_y) and quit_button.onscreen == True:
+        settings.playButton.onscreen = False
+    if settings.quitButton.rect.collidepoint(mouse_x,mouse_y) and settings.quitButton.onscreen == True:
       quitGame() 
 
-def startEvents(mouse_x, mouse_y, settings, hunt_button):
+def startEvents(mouse_x, mouse_y, settings):
     """ start the round if the player clicks the mouse button"""
-    if hunt_button.rect.collidepoint(mouse_x,mouse_y) and hunt_button.onscreen == True:
+    if settings.huntButton.rect.collidepoint(mouse_x,mouse_y) and settings.huntButton.onscreen == True:
         settings.state = "running"
-        hunt_button.onscreen = False
+        settings.huntButton.onscreen = False
 
-def loadNext(mouse_x, mouse_y, settings, next_button):
+def loadNext(mouse_x, mouse_y, settings):
     """ start the round if the player clicks the mouse button"""
-    if next_button.rect.collidepoint(mouse_x,mouse_y) and next_button.onscreen == True:
-        settings.state = "startLevel"
-        next_button.onscreen = False
+    settings.levelHeading = Text(settings.gameDisplay, 120, 500, 340, settings.light_orange, "Farm {0}".format(settings.level))
+    updatedHeading = settings.levelHeading
+    settings.startUX[0] = updatedHeading
 
-def resetGame(mouse_x, mouse_y, settings, reset_button,quit_button, player,shield):
+    if settings.nextButton.rect.collidepoint(mouse_x,mouse_y) and settings.nextButton.onscreen == True:
+        settings.state = "startLevel"
+        settings.nextButton.onscreen = False
+
+def resetGame(mouse_x, mouse_y, settings, player):
     """ reset game settings to initial values"""
-    if reset_button.rect.collidepoint(mouse_x,mouse_y) and reset_button.onscreen == True:
-        init_stats(settings, player,shield)
-        reset_button.onscreen = False
-    if quit_button.rect.collidepoint(mouse_x,mouse_y) and quit_button.onscreen == True:
+    if settings.restartButton.rect.collidepoint(mouse_x,mouse_y) and settings.restartButton.onscreen == True:
+        init_stats(settings, player)
+        settings.restartButton.onscreen = False
+    if settings.quitButton.rect.collidepoint(mouse_x,mouse_y) and settings.quitButton.onscreen == True:
       quitGame() 
 
 
@@ -153,14 +151,14 @@ def quitGame():
     pg.quit()
     sys.exit()
 
-def update_characters(gameSettings, gameDisplay, player, farmers,bullets,shield,tb):
+def update_characters(settings, player, farmers, bullets, tb):
     """ update images on the screen and draw new screen"""
-    gameDisplay.fill(gameSettings.bg_color)
-    gameDisplay.blit(gameSettings.bg_image,(0,0))
+    settings.gameDisplay.fill(settings.bg_color)
+    settings.gameDisplay.blit(settings.bg_image,(0,0))
     player.blit_self()
     for f in farmers:
         f.blit_self()
-    for a in gameSettings.animals:
+    for a in settings.animals:
         if a.rect.bottom > 550:
             a.blit_self()
     # used to control how long the tb is displayed on the screen
@@ -168,45 +166,46 @@ def update_characters(gameSettings, gameDisplay, player, farmers,bullets,shield,
         tb.blit_self()
     for b in bullets:
         b.blit_self()
-    shield.blit_self()
+    settings.shield_indicator.blit_self()
 
     pg.display.update()
 
-def newgame(gameSettings,gameDisplay,newgameUX):
+def newgame(settings):
     """ methods for newgame state"""
-    gameDisplay.blit(gameSettings.bg_image,(0,0))
-    for n in newgameUX:
+    settings.gameDisplay.blit(settings.bg_image,(0,0))
+    for n in settings.newgameUX:
         n.blit_self()
 
     pg.display.update()
 
-def startLevel(gameSettings,gameDisplay, startUX):
+def startLevel(settings):
     """ methods for start level state"""
-    gameDisplay.blit(gameSettings.bg_image,(0,0))
+    settings.gameDisplay.blit(settings.bg_image,(0,0))
 
     #update the level number
-    currLVL = "Farm {0}".format(gameSettings.level)
-    print(gameSettings.level)
+    # currLVL = "Farm {0}".format(settings.level)
+    # print(settings.level)
     # startUX[0].msg = "Farm {0}".format(gameSettings.level)
-    startUX[0].msg = currLVL
+    # settings.levelHeading.msg = currLVL
 
-    for i in startUX:
+    for i in settings.startUX:
         i.blit_self()
 
     pg.display.update()
 
-def endLevel(gameSettings,gameDisplay, endUX):
+def endLevel(settings):
     """ methods for end level state"""
-    gameDisplay.blit(gameSettings.bg_image,(0,0))
-    for i in endUX:
+    settings.gameDisplay.blit(settings.bg_image,(0,0))
+    for i in settings.endUX:
         i.blit_self()
 
     pg.display.update()
+    # settings.levelHeading = Text(settings.gameDisplay, 120, 500, 340, settings.light_orange, "Farm {0}".format(settings.level))
 
-def gameover(gameSettings,gameDisplay,gameoverUX):
+def gameover(settings):
     """ methods for gameover state"""
-    gameDisplay.blit(gameSettings.bg_image,(0,0))
-    for g in gameoverUX:
+    settings.gameDisplay.blit(settings.bg_image,(0,0))
+    for g in settings.gameoverUX:
         g.blit_self()
 
     pg.display.update()
