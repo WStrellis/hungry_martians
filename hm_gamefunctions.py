@@ -1,22 +1,37 @@
 #!python3
 
-import sys, pygame as pg
+import sys, pygame as pg, random
+from hm_cow import Cow
+from hm_farmer import Farmer
 from pygame.locals import *
 from hm_ux import Text
 
 def init_stats(settings, ship):
     """ reset everything to the start value"""
+    settings.farmers.empty()
+    settings.cows.empty()
     settings.level = 1
     ship.hp = 3
+    settings.num_farmers = 1
+    settings.num_cows = 2
     settings.captured = 0
     settings.state = "startLevel"
     settings.shield_indicator.setImage(ship.hp)
+    makeFarmer(settings)
+    makeCow(settings)
 
-def levelComplete(settings):
+def levelComplete(settings, ship):
     """ if all animals are captured go the the next level"""
-    if len(settings.animals) == settings.captured:
+    if len(settings.cows) == settings.captured:
+        settings.farmers.empty()
+        settings.cows.empty()
         settings.state = "endLevel"
         settings.level += 1
+        settings.num_farmers += 1
+        settings.num_cows += 1
+        settings.captured = 0
+        makeFarmer(settings)
+        makeCow(settings)
 
 def move_farmers(farmers):
     """ move each farmer"""
@@ -60,9 +75,10 @@ def ship_hit(ship, bullets, settings):
     
 def animals_hit(beam, settings):
     """ determine if animals have been shot by the laser"""
-    animalsHit = pg.sprite.spritecollide(beam, settings.animals, False)
+    animalsHit = pg.sprite.spritecollide(beam, settings.cows, False)
     for a in animalsHit:
         a.captured = True
+        print("captured: " + str(settings.captured))
         settings.captured += 1
 
 
@@ -88,7 +104,7 @@ def check_events(player, settings, tb):
             if event.key == K_SPACE and player.charged == True:
                 player.fire_tb(tb)
                 animals_hit(tb, settings)
-                levelComplete(settings)
+                levelComplete(settings, player)
 
         elif event.type == KEYUP :
             if event.key == K_RIGHT: 
@@ -151,16 +167,16 @@ def quitGame():
     pg.quit()
     sys.exit()
 
-def update_characters(settings, player, farmers, bullets, tb):
+def update_characters(settings, player, bullets, tb):
     """ update images on the screen and draw new screen"""
     settings.gameDisplay.fill(settings.bg_color)
     settings.gameDisplay.blit(settings.bg_image,(0,0))
     player.blit_self()
-    for f in farmers:
+    for f in settings.farmers:
         f.blit_self()
-    for a in settings.animals:
-        if a.rect.bottom > 550:
-            a.blit_self()
+    for c in settings.cows:
+        if c.rect.bottom > 550:
+            c.blit_self()
     # used to control how long the tb is displayed on the screen
     if tb.lifespan > 0:
         tb.blit_self()
@@ -182,12 +198,6 @@ def startLevel(settings):
     """ methods for start level state"""
     settings.gameDisplay.blit(settings.bg_image,(0,0))
 
-    #update the level number
-    # currLVL = "Farm {0}".format(settings.level)
-    # print(settings.level)
-    # startUX[0].msg = "Farm {0}".format(gameSettings.level)
-    # settings.levelHeading.msg = currLVL
-
     for i in settings.startUX:
         i.blit_self()
 
@@ -200,7 +210,6 @@ def endLevel(settings):
         i.blit_self()
 
     pg.display.update()
-    # settings.levelHeading = Text(settings.gameDisplay, 120, 500, 340, settings.light_orange, "Farm {0}".format(settings.level))
 
 def gameover(settings):
     """ methods for gameover state"""
@@ -209,3 +218,53 @@ def gameover(settings):
         g.blit_self()
 
     pg.display.update()
+
+def setupMovement():
+    """ returns a tuple of either 1,0 or 0,1"""
+    mvmt = random.choice([(0,1),(1,0)])
+    return mvmt
+
+def setStartPoint(numCharacters):
+    """ set up the characters to be evenly spaced"""
+    evenDistance = int(1000 / (numCharacters + 1 ))
+    positions = [ evenDistance * (x+ 1) for x in range(0, numCharacters)]
+
+    negOffset = -int(evenDistance * 0.35)
+    posOffset = int(evenDistance * 0.35)
+
+    final = []
+
+    for x in positions: 
+        final.append( x + random.choice([negOffset,posOffset]))
+    return final
+
+def makeFarmer(settings):
+    """ function to make a farmer"""
+
+    # create list of start points
+    startPoints = setStartPoint(settings.num_farmers)
+
+    for x in range(0, settings.num_farmers):
+        # make a tuple containing 0/1  for moveleft/moveingright
+        left, right = setupMovement()
+
+        # create a value for the shot trigger
+        possible = [ x for x in range(20, 36)]
+        random.shuffle(possible)
+        shotTrig= random.choice(possible)
+
+        location = startPoints[x]
+        settings.farmers.add(Farmer(settings.gameDisplay, location, 750, left, right, 3, shotTrig))
+
+def makeCow(settings):
+    """ function to make a cow"""
+
+    # create list of start points
+    startPoints = setStartPoint(settings.num_cows)
+
+    for x in range(0, settings.num_cows):
+        # make a tuple containing 0/1  for moveleft/moveingright
+        left, right = setupMovement()
+
+        location = startPoints[x]
+        settings.cows.add(Cow(settings.gameDisplay, location, 750, left, right, 3 ))

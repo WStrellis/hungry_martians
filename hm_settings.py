@@ -26,6 +26,14 @@ class Settings():
         # level tracker
         self.level = 1
 
+        # group for all farmers
+        self.num_farmers = 1
+        self.farmers = pg.sprite.Group()
+
+        # track number of cows
+        self.num_cows = 2
+        self.cows = pg.sprite.Group()
+
         # group for all animals
         self.animals = pg.sprite.Group()
 
@@ -61,7 +69,7 @@ class Settings():
 
         # end level screen components
         self.goodJob = Text(self.gameDisplay, 120, 500, 240, self.light_orange, "Good Job!")
-        self.endMsg = Text(self.gameDisplay, 120, 500, 340, self.light_orange, "All animals abducted!")
+        self.endMsg = Text(self.gameDisplay, 100, 500, 340, self.light_orange, "All animals abducted!")
         self.nextButton = UXcomponent(self.gameDisplay, self.nextImg, 173, 159,500,500)
 
         # group for new game menu components
@@ -75,10 +83,3 @@ class Settings():
 
         # group for game over menu components
         self.gameoverUX = [self.title, self.restartButton, self.quitButton]
-        
-        
-
-    def currentLVL(self):
-        """ update the level message"""
-        msg = "Farm {0}".format(self.level)
-        return msg
