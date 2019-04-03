@@ -6,32 +6,28 @@ from hm_farmer import Farmer
 from pygame.locals import *
 from hm_ux import Text
 
-def init_stats(settings, ship):
-    """ reset everything to the start value"""
+def starting(settings, ship):
+    """ starting values"""
+    settings.level = 1
+    settings.num_cows = 2
+    settings.num_farmers = 1
+    ship.hp = 3
+
+def makeCharacters(settings, ship):
+    """ make farmers and cows"""
     settings.farmers.empty()
     settings.cows.empty()
-    settings.level = 1
-    ship.hp = 3
-    settings.num_farmers = 1
-    settings.num_cows = 2
-    settings.captured = 0
-    settings.state = "startLevel"
-    settings.shield_indicator.setImage(ship.hp)
     makeFarmer(settings)
     makeCow(settings)
 
 def levelComplete(settings, ship):
     """ if all animals are captured go the the next level"""
-    if len(settings.cows) == settings.captured:
-        settings.farmers.empty()
-        settings.cows.empty()
-        settings.state = "endLevel"
-        settings.level += 1
-        settings.num_farmers += 1
-        settings.num_cows += 1
-        settings.captured = 0
-        makeFarmer(settings)
-        makeCow(settings)
+    ship.hp = 3
+    settings.shield_indicator.setImage(ship.hp)
+    settings.captured = 0
+    settings.level += 1
+    settings.num_farmers += 1
+    settings.num_cows += 1
 
 def move_farmers(farmers):
     """ move each farmer"""
@@ -78,7 +74,6 @@ def animals_hit(beam, settings):
     animalsHit = pg.sprite.spritecollide(beam, settings.cows, False)
     for a in animalsHit:
         a.captured = True
-        print("captured: " + str(settings.captured))
         settings.captured += 1
 
 
@@ -104,7 +99,6 @@ def check_events(player, settings, tb):
             if event.key == K_SPACE and player.charged == True:
                 player.fire_tb(tb)
                 animals_hit(tb, settings)
-                levelComplete(settings, player)
 
         elif event.type == KEYUP :
             if event.key == K_RIGHT: 
@@ -118,45 +112,51 @@ def check_events(player, settings, tb):
                 mouse_x, mouse_y = pg.mouse.get_pos()
 
                 if settings.state == 'newgame':
-                    playGame(mouse_x,mouse_y,settings)
+                    playGame(mouse_x,mouse_y,settings, player)
 
                 if settings.state == 'gameover':
                     resetGame(mouse_x,mouse_y,settings, player)
 
                 if settings.state == 'startLevel':
-                    startEvents(mouse_x,mouse_y,settings )
+                    setupLevelStart(mouse_x,mouse_y,settings, player )
 
                 if settings.state == 'endLevel':
-                    loadNext(mouse_x,mouse_y,settings)
+                    loadNext(mouse_x,mouse_y,settings, player)
 
-def playGame(mouse_x, mouse_y, settings):
+def playGame(mouse_x, mouse_y, settings, ship):
     """ start the game if the player clicks the mouse button"""
     if settings.playButton.rect.collidepoint(mouse_x,mouse_y) and settings.playButton.onscreen == True:
+        starting(settings, ship)
         settings.state = "startLevel"
         settings.playButton.onscreen = False
+        
     if settings.quitButton.rect.collidepoint(mouse_x,mouse_y) and settings.quitButton.onscreen == True:
       quitGame() 
 
-def startEvents(mouse_x, mouse_y, settings):
-    """ start the round if the player clicks the mouse button"""
+def setupLevelStart(mouse_x, mouse_y, settings, ship):
+    """ sets up the screen to start each new level"""
+
     if settings.huntButton.rect.collidepoint(mouse_x,mouse_y) and settings.huntButton.onscreen == True:
+        makeCharacters(settings, ship)
         settings.state = "running"
         settings.huntButton.onscreen = False
 
-def loadNext(mouse_x, mouse_y, settings):
-    """ start the round if the player clicks the mouse button"""
-    settings.levelHeading = Text(settings.gameDisplay, 120, 500, 340, settings.light_orange, "Farm {0}".format(settings.level))
-    updatedHeading = settings.levelHeading
-    settings.startUX[0] = updatedHeading
+def loadNext(mouse_x, mouse_y, settings, ship):
+    """ executed when all of the cows have been captured"""
 
     if settings.nextButton.rect.collidepoint(mouse_x,mouse_y) and settings.nextButton.onscreen == True:
+        levelComplete( settings, ship)
+        level = settings.level
+        settings.levelHeading = Text(settings.gameDisplay, 120, 500, 340, settings.light_orange, "Farm {0}".format(level))
+        updatedHeading = settings.levelHeading
+        settings.startUX[0] = updatedHeading
         settings.state = "startLevel"
         settings.nextButton.onscreen = False
 
 def resetGame(mouse_x, mouse_y, settings, player):
     """ reset game settings to initial values"""
     if settings.restartButton.rect.collidepoint(mouse_x,mouse_y) and settings.restartButton.onscreen == True:
-        init_stats(settings, player)
+        settings.state = "newgame"
         settings.restartButton.onscreen = False
     if settings.quitButton.rect.collidepoint(mouse_x,mouse_y) and settings.quitButton.onscreen == True:
       quitGame() 
@@ -229,14 +229,14 @@ def setStartPoint(numCharacters):
     evenDistance = int(1000 / (numCharacters + 1 ))
     positions = [ evenDistance * (x+ 1) for x in range(0, numCharacters)]
 
-    negOffset = -int(evenDistance * 0.35)
-    posOffset = int(evenDistance * 0.35)
+    negOffset = -int(evenDistance * 0.2)
+    posOffset = int(evenDistance * 0.2)
 
     final = []
 
     for x in positions: 
         final.append( x + random.choice([negOffset,posOffset]))
-    return final
+    return positions
 
 def makeFarmer(settings):
     """ function to make a farmer"""
@@ -249,7 +249,7 @@ def makeFarmer(settings):
         left, right = setupMovement()
 
         # create a value for the shot trigger
-        possible = [ x for x in range(20, 36)]
+        possible = [ x for x in range(25, 40)]
         random.shuffle(possible)
         shotTrig= random.choice(possible)
 

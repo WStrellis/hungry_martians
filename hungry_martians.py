@@ -34,7 +34,6 @@ def run_game():
         gameFunc.check_events(player, gameSettings, tractorBeam )
 
         if gameSettings.state == "newgame":
-            gameFunc.init_stats(gameSettings, player)
             gameFunc.newgame(gameSettings)
 
         if gameSettings.state == 'startLevel':
@@ -50,6 +49,9 @@ def run_game():
             gameFunc.ship_hit(player,bullets, gameSettings)
             gameFunc.update_characters(gameSettings, player, bullets, tractorBeam)
             player.chargeBeam()
+            if len(gameSettings.cows) == gameSettings.captured:
+                gameSettings.state = 'endLevel'
+                bullets.empty()
 
         if gameSettings.state == "endLevel":
             gameFunc.endLevel(gameSettings)

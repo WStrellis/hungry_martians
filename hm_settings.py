@@ -57,11 +57,14 @@ class Settings():
         # ux components
         self.shield_indicator = ShieldIcon(self.gameDisplay,self.greenShield, 31, 35, 35, 75)
 
+        # new game screen
         self.title = UXcomponent(self.gameDisplay,self.titleImg, 513, 141, 500,340)
-
         self.playButton = UXcomponent(self.gameDisplay,self.playImg, 173, 159,500,500)
-        self.restartButton = UXcomponent(self.gameDisplay, self.restartImg, 173, 159,500,500)
         self.quitButton = UXcomponent(self.gameDisplay, self.quitImg, 173, 159, 500, 700)
+
+        # game over screen
+        self.gameOverMsg = Text(self.gameDisplay, 120, 500, 240, self.light_orange, "Game Over")
+        self.restartButton = UXcomponent(self.gameDisplay, self.restartImg, 173, 159,500,500)
 
         # start level screen components
         self.levelHeading = Text(self.gameDisplay, 120, 500, 340, self.light_orange, "Farm {0}".format(self.level))
@@ -82,4 +85,4 @@ class Settings():
         self.endUX = [self.goodJob, self.endMsg, self.nextButton]
 
         # group for game over menu components
-        self.gameoverUX = [self.title, self.restartButton, self.quitButton]
+        self.gameoverUX = [self.gameOverMsg, self.restartButton, self.quitButton]

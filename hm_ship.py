@@ -25,8 +25,8 @@ class Ship(Character):
         """ shoot the tractor beam"""
 
         #change the image of the ship to 'charging'
-         
         self.image = self.ufo_reloading
+
         # set charging timer to 3 seconds
         self.chargingTimer = 90
         self.charged = False
