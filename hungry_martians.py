@@ -28,6 +28,10 @@ def run_game():
     #create a group for the bullets
     bullets = pg.sprite.Group()
 
+    # music
+    pg.mixer.music.load("Shady_Grove_Instrumental1.ogg")
+    pg.mixer.music.set_volume(0.8) 
+    pg.mixer.music.play()
 
     while True:
 
