@@ -34,6 +34,9 @@ class Settings():
         self.num_cows = 2
         self.cows = pg.sprite.Group()
 
+        # moo sound
+        self.cowsSay = pg.mixer.Sound("yudena__cow-bymondfisch89.ogg")
+
         # group for all animals
         self.animals = pg.sprite.Group()
 
@@ -112,3 +115,7 @@ class Settings():
             if x.captured == True:
                 total += 1
         self.captured = total
+
+    def moo(self):
+        """ play a moo sound"""
+        self.cowsSay.play()

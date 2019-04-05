@@ -56,6 +56,10 @@ def ship_hit(ship, bullets, settings):
 def animals_hit(beam, settings):
     """ determine if animals have been shot by the laser"""
     animalsHit = pg.sprite.spritecollide(beam, settings.cows, False)
+    # play moo sound
+    if animalsHit:
+        settings.moo()
+
     for a in animalsHit:
         # makes the cow move up the screen
         a.captured = True

@@ -21,9 +21,11 @@ class Ship(Character):
         self.charged = True
         self.chargingTimer = 0
 
+        self.beamSound = pg.mixer.Sound("ani-music__massive-laser-blast-laser2.wav")
+
     def fire_tb(self, tb):
         """ shoot the tractor beam"""
-
+        self.beamSound.play()
         #change the image of the ship to 'charging'
         self.image = self.ufo_reloading
 
