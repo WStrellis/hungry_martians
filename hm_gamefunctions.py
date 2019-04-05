@@ -6,30 +6,12 @@ from hm_farmer import Farmer
 from pygame.locals import *
 from hm_ux import Text
 
-def starting(settings, ship):
-    """ starting values"""
-    settings.level = 1
-    settings.num_cows = 2
-    settings.num_farmers = 1
-    ship.hp = 3
-
-
-# def makeCharacters(settings, ship):
 def makeCharacters(settings):
     """ make farmers and cows"""
     settings.farmers.empty()
     settings.cows.empty()
     makeFarmer(settings)
     makeCow(settings)
-
-def levelComplete(settings, ship):
-    """ if all animals are captured go the the next level"""
-    ship.hp = 3
-    settings.shield_indicator.setImage(ship.hp)
-    settings.captured = 0
-    settings.level += 1
-    settings.num_farmers += 1
-    settings.num_cows += 1
 
 def move_farmers(farmers):
     """ move each farmer"""
@@ -77,10 +59,6 @@ def animals_hit(beam, settings):
     for a in animalsHit:
         # makes the cow move up the screen
         a.captured = True
-        #used to detect win condition
-        # settings.captured += 1
-        # settings.captured = 
-        # print(settings.num_cows, settings.captured)
 
 
 def player_movement(player):
@@ -106,7 +84,6 @@ def check_events(player, settings, tb):
                 player.fire_tb(tb)
                 animals_hit(tb, settings)
                 settings.setCaptured()
-                print(settings.num_cows, settings.captured)
 
         elif event.type == KEYUP :
             if event.key == K_RIGHT: 
@@ -134,7 +111,6 @@ def check_events(player, settings, tb):
 def playGame(mouse_x, mouse_y, settings, ship):
     """ start the game if the player clicks the mouse button"""
     if settings.playButton.rect.collidepoint(mouse_x,mouse_y) and settings.playButton.onscreen == True:
-        # starting(settings, ship)
         settings.setupNewGame()
         ship.resetHP()
         settings.state = "startLevel"
