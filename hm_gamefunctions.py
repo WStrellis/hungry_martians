@@ -13,7 +13,9 @@ def starting(settings, ship):
     settings.num_farmers = 1
     ship.hp = 3
 
-def makeCharacters(settings, ship):
+
+# def makeCharacters(settings, ship):
+def makeCharacters(settings):
     """ make farmers and cows"""
     settings.farmers.empty()
     settings.cows.empty()
@@ -73,8 +75,12 @@ def animals_hit(beam, settings):
     """ determine if animals have been shot by the laser"""
     animalsHit = pg.sprite.spritecollide(beam, settings.cows, False)
     for a in animalsHit:
+        # makes the cow move up the screen
         a.captured = True
-        settings.captured += 1
+        #used to detect win condition
+        # settings.captured += 1
+        # settings.captured = 
+        # print(settings.num_cows, settings.captured)
 
 
 def player_movement(player):
@@ -99,6 +105,8 @@ def check_events(player, settings, tb):
             if event.key == K_SPACE and player.charged == True:
                 player.fire_tb(tb)
                 animals_hit(tb, settings)
+                settings.setCaptured()
+                print(settings.num_cows, settings.captured)
 
         elif event.type == KEYUP :
             if event.key == K_RIGHT: 
@@ -126,7 +134,9 @@ def check_events(player, settings, tb):
 def playGame(mouse_x, mouse_y, settings, ship):
     """ start the game if the player clicks the mouse button"""
     if settings.playButton.rect.collidepoint(mouse_x,mouse_y) and settings.playButton.onscreen == True:
-        starting(settings, ship)
+        # starting(settings, ship)
+        settings.setupNewGame()
+        ship.resetHP()
         settings.state = "startLevel"
         settings.playButton.onscreen = False
         
@@ -137,7 +147,7 @@ def setupLevelStart(mouse_x, mouse_y, settings, ship):
     """ sets up the screen to start each new level"""
 
     if settings.huntButton.rect.collidepoint(mouse_x,mouse_y) and settings.huntButton.onscreen == True:
-        makeCharacters(settings, ship)
+        makeCharacters(settings)
         settings.state = "running"
         settings.huntButton.onscreen = False
 
@@ -145,7 +155,8 @@ def loadNext(mouse_x, mouse_y, settings, ship):
     """ executed when all of the cows have been captured"""
 
     if settings.nextButton.rect.collidepoint(mouse_x,mouse_y) and settings.nextButton.onscreen == True:
-        levelComplete( settings, ship)
+        settings.setupNextLevel()
+        ship.resetHP()
         level = settings.level
         settings.levelHeading = Text(settings.gameDisplay, 120, 500, 340, settings.light_orange, "Farm {0}".format(level))
         updatedHeading = settings.levelHeading
@@ -157,6 +168,8 @@ def resetGame(mouse_x, mouse_y, settings, player):
     """ reset game settings to initial values"""
     if settings.restartButton.rect.collidepoint(mouse_x,mouse_y) and settings.restartButton.onscreen == True:
         settings.state = "newgame"
+        settings.setupNewGame()
+        player.resetHP()
         settings.restartButton.onscreen = False
     if settings.quitButton.rect.collidepoint(mouse_x,mouse_y) and settings.quitButton.onscreen == True:
       quitGame() 
@@ -229,14 +242,15 @@ def setStartPoint(numCharacters):
     evenDistance = int(1000 / (numCharacters + 1 ))
     positions = [ evenDistance * (x+ 1) for x in range(0, numCharacters)]
 
-    negOffset = -int(evenDistance * 0.2)
-    posOffset = int(evenDistance * 0.2)
+    negOffset = -int(evenDistance * 0.15)
+    posOffset = int(evenDistance * 0.15)
 
     final = []
 
     for x in positions: 
         final.append( x + random.choice([negOffset,posOffset]))
-    return positions
+    # return positions
+    return final
 
 def makeFarmer(settings):
     """ function to make a farmer"""
@@ -267,4 +281,4 @@ def makeCow(settings):
         left, right = setupMovement()
 
         location = startPoints[x]
-        settings.cows.add(Cow(settings.gameDisplay, location, 750, left, right, 3 ))
+        settings.cows.add(Cow(settings.gameDisplay, location, 750, left, right, 5 ))

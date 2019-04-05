@@ -46,6 +46,10 @@ class Ship(Character):
             self.image = self.ufo_charged
             self.charged = True
 
+    def resetHP(self):
+        """ reset hp to 3"""
+        self.hp = 3
+
 class TBeam(pg.sprite.Sprite):
     """ class to make tracor beams"""
     def __init__(self,display, centerx, top, maxlife):

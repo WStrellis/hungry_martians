@@ -86,3 +86,29 @@ class Settings():
 
         # group for game over menu components
         self.gameoverUX = [self.gameOverMsg, self.restartButton, self.quitButton]
+
+    def setupNextLevel(self):
+        """ set up the next level"""
+        self.shield_indicator.image = self.greenShield
+        self.captured = 0
+        self.level += 1
+        self.num_farmers += 1
+        self.num_cows += 1
+
+    def setupNewGame(self):
+        """ setup a new game"""
+        self.level = 1
+        self.num_cows = 2
+        self.num_farmers = 1
+        self.levelHeading = Text(self.gameDisplay, 120, 500, 340, self.light_orange, "Farm 1")
+        self.shield_indicator.image = self.greenShield
+        updatedHeading = self.levelHeading
+        self.startUX[0] = updatedHeading
+
+    def setCaptured(self):
+        """ increment the captured attribute"""
+        total = 0
+        for x in self.cows:
+            if x.captured == True:
+                total += 1
+        self.captured = total

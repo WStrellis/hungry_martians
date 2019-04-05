@@ -51,6 +51,9 @@ def run_game():
             player.chargeBeam()
             if len(gameSettings.cows) == gameSettings.captured:
                 gameSettings.state = 'endLevel'
+                tractorBeam.lifespan = 0
+                player.charged = True
+                player.chargingTimer = 0
                 bullets.empty()
 
         if gameSettings.state == "endLevel":
