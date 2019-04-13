@@ -22,7 +22,7 @@ class Ship(Character):
         self.chargingTimer = 0
 
         self.beamSound = pg.mixer.Sound("ani-music__massive-laser-blast-laser2.wav")
-        self.damageSound = pg.mixer.Sound("japanyoshithegamer__sci-fi-warning-beep.wav")
+        self.damageSound = pg.mixer.Sound("danielnieto7__alert.wav")
 
     def fire_tb(self, tb):
         """ shoot the tractor beam"""
@@ -53,6 +53,10 @@ class Ship(Character):
         """ reset hp to 3"""
         self.hp = 3
 
+    def damageTaken(self):
+        """ play a sound when the ship takes damage"""
+        self.damageSound.play(maxtime=1000)
+
 class TBeam(pg.sprite.Sprite):
     """ class to make tracor beams"""
     def __init__(self,display, centerx, top, maxlife):
@@ -78,7 +82,3 @@ class TBeam(pg.sprite.Sprite):
         """ draw entity onto the screen"""
         self.lifespan -= 1
         self.display.blit(self.image,self.rect)
-
-    def damageTaken(self):
-        """ play a sound when the ship takes damage"""
-        self.damageSound.play()
