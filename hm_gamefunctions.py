@@ -2,6 +2,7 @@
 
 import sys, pygame as pg, random
 from hm_cow import Cow
+from hm_chicken import Chicken
 from hm_farmer import Farmer
 from pygame.locals import *
 from hm_ux import Text
@@ -9,9 +10,11 @@ from hm_ux import Text
 def makeCharacters(settings):
     """ make farmers and cows"""
     settings.farmers.empty()
-    settings.cows.empty()
+    settings.animals.empty()
     makeFarmer(settings)
     makeCow(settings)
+    if settings.level >= 3:
+        makeChicken(settings)
 
 def move_farmers(farmers):
     """ move each farmer"""
@@ -55,14 +58,13 @@ def ship_hit(ship, bullets, settings):
     
 def animals_hit(beam, settings):
     """ determine if animals have been shot by the laser"""
-    animalsHit = pg.sprite.spritecollide(beam, settings.cows, False)
-    # play moo sound
-    if animalsHit:
-        settings.moo()
+    animalsHit = pg.sprite.spritecollide(beam, settings.animals, False)
 
     for a in animalsHit:
-        # makes the cow move up the screen
+        # makes the animal move up the screen
         a.captured = True
+        # play the animal's sound
+        a.speak()
 
 
 def player_movement(player):
@@ -167,9 +169,9 @@ def update_characters(settings, player, bullets, tb):
     player.blit_self()
     for f in settings.farmers:
         f.blit_self()
-    for c in settings.cows:
-        if c.rect.bottom > 550:
-            c.blit_self()
+    for a in settings.animals:
+        if a.rect.bottom > 550:
+            a.blit_self()
     # used to control how long the tb is displayed on the screen
     if tb.lifespan > 0:
         tb.blit_self()
@@ -214,7 +216,7 @@ def gameover(settings):
 
 def setupMovement():
     """ returns a tuple of either 1,0 or 0,1"""
-    mvmt = random.choice([(0,1),(1,0)])
+    mvmt = random.choice([(0,1),(1,0),(0,1),(1,0)])
     return mvmt
 
 def setStartPoint(numCharacters):
@@ -248,7 +250,7 @@ def makeFarmer(settings):
         shotTrig= random.choice(possible)
 
         location = startPoints[x]
-        settings.farmers.add(Farmer(settings.gameDisplay, location, 750, left, right, 3, shotTrig))
+        settings.farmers.add(Farmer(settings.gameDisplay, location, 730, left, right, 3, shotTrig))
 
 def makeCow(settings):
     """ function to make a cow"""
@@ -261,4 +263,9 @@ def makeCow(settings):
         left, right = setupMovement()
 
         location = startPoints[x]
-        settings.cows.add(Cow(settings.gameDisplay, location, 750, left, right, 5 ))
+        settings.animals.add(Cow(settings.gameDisplay, location, 770, left, right, 5, settings.cowLeft, settings.cowRight , settings.cowsSay))
+
+def makeChicken(settings):
+    """ function to make chickens"""
+    left, right = setupMovement()
+    settings.animals.add(Chicken(settings.gameDisplay, 500, 770, left, right, 7, settings.chickenLeft, settings.chickenRight, settings.chickensSay))

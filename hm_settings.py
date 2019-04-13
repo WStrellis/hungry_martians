@@ -32,10 +32,19 @@ class Settings():
 
         # track number of cows
         self.num_cows = 2
-        self.cows = pg.sprite.Group()
+
+        #animal images
+        self.cowLeft = pg.image.load("D:/Python/hungry_martians/cow_left.png")
+        self.cowRight = pg.image.load("D:/Python/hungry_martians/cow_right.png")
+
+        self.chickenLeft = pg.image.load("D:/Python/hungry_martians/chicken_left.png")
+        self.chickenRight = pg.image.load("D:/Python/hungry_martians/chicken_right.png")
 
         # moo sound
         self.cowsSay = pg.mixer.Sound("yudena__cow-bymondfisch89.ogg")
+
+        # cluck sound
+        self.chickensSay = pg.mixer.Sound("rudmer-rotteveel__chicken-single-alarm-call.wav")
 
         # group for all animals
         self.animals = pg.sprite.Group()
@@ -111,11 +120,7 @@ class Settings():
     def setCaptured(self):
         """ increment the captured attribute"""
         total = 0
-        for x in self.cows:
+        for x in self.animals:
             if x.captured == True:
                 total += 1
         self.captured = total
-
-    def moo(self):
-        """ play a moo sound"""
-        self.cowsSay.play()

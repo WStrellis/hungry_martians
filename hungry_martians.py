@@ -30,7 +30,7 @@ def run_game():
 
     # music
     pg.mixer.music.load("Shady_Grove_Instrumental1.ogg")
-    pg.mixer.music.set_volume(0.8) 
+    pg.mixer.music.set_volume(0.6) 
     pg.mixer.music.play(loops= -1)
 
     while True:
@@ -47,13 +47,13 @@ def run_game():
             gameFunc.player_movement(player)
             player.move_self()
             gameFunc.move_farmers(gameSettings.farmers)
-            gameFunc.move_animals(gameSettings.cows)
+            gameFunc.move_animals(gameSettings.animals)
             gameFunc.farmer_shoot(gameSettings.farmers, gameSettings.gameDisplay, bullets)
             gameFunc.move_bullet(bullets)
             gameFunc.ship_hit(player,bullets, gameSettings)
             gameFunc.update_characters(gameSettings, player, bullets, tractorBeam)
             player.chargeBeam()
-            if len(gameSettings.cows) == gameSettings.captured:
+            if len(gameSettings.animals) == gameSettings.captured:
                 gameSettings.state = 'endLevel'
                 tractorBeam.lifespan = 0
                 player.charged = True
