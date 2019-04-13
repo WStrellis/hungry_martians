@@ -48,6 +48,8 @@ def ship_hit(ship, bullets, settings):
     if pg.sprite.spritecollideany(ship,bullets):
         # subtract 1 hp from the ship
         ship.hp -= 1
+        # play the damage sound
+        ship.damageTaken()
         # update the shield icon
         settings.shield_indicator.setImage(ship.hp)
         #delete all bullets
