@@ -57,6 +57,7 @@ class Animal(pg.sprite.Sprite):
                     self.moving_right = True
                     self.moving_left = False
 
-    def speak(self):
+    def speak(self, gameState):
         """ play the animal's sound"""
-        self.animalSound.play() 
+        if gameState == 'running':
+            self.animalSound.play() 

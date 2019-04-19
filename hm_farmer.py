@@ -10,8 +10,8 @@ class Farmer(Character):
     def __init__(self, display, centerx, bottom, moving_left, moving_right, speed, shot_trigger):
         super().__init__(display, centerx, bottom, moving_left, moving_right, speed)
 
-        self.farmerLeft = pg.image.load("D:/Python/hungry_martians/farmer_left.png")
-        self.farmerRight = pg.image.load("D:/Python/hungry_martians/farmer_right.png")
+        self.farmerLeft = pg.image.load("farmer_left.png")
+        self.farmerRight = pg.image.load("farmer_right.png")
 
         if self.moving_left:
             self.image = self.farmerLeft

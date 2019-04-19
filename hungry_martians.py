@@ -22,7 +22,7 @@ def run_game():
     pg.display.set_caption("Hungry Martians")
    
     # create the player
-    player = Ship(gameSettings.gameDisplay, 500, 200, 0, 0, 10, 3)
+    player = Ship(gameSettings.gameDisplay, 425, 150, 0, 0, 10, 3)
     tractorBeam = TBeam(gameSettings.gameDisplay, player.rect.centerx, player.rect.bottom, 10)
 
     #create a group for the bullets

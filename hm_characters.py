@@ -10,7 +10,7 @@ class Character(pg.sprite.Sprite):
         self.display_rect = display.get_rect()
 
         # load entity image get its rect
-        self.image = pg.image.load("D:/Python/hungry_martians/alien_ship_charged.png")
+        self.image = pg.image.load("alien_ship_charged.png")
 
         # rect size
         self.rect = self.image.get_rect()

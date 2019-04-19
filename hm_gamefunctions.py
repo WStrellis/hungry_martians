@@ -24,7 +24,7 @@ def move_farmers(farmers):
 def move_animals(animals):
     """ move each cow"""
     for a in animals:
-        if a.rect.bottom >550:
+        if a.rect.bottom >350:
             a.move_self()
 
 def farmer_shoot(farmers,display,bullets):
@@ -66,7 +66,7 @@ def animals_hit(beam, settings):
         # makes the animal move up the screen
         a.captured = True
         # play the animal's sound
-        a.speak()
+        a.speak(settings.state)
 
 
 def player_movement(player):
@@ -89,7 +89,7 @@ def check_events(player, settings, tb):
             if event.key == K_LEFT:
                 player.moving_left = True
             if event.key == K_SPACE and player.charged == True:
-                player.fire_tb(tb)
+                player.fire_tb(tb, settings.state)
                 animals_hit(tb, settings)
                 settings.setCaptured()
 
@@ -142,7 +142,7 @@ def loadNext(mouse_x, mouse_y, settings, ship):
         settings.setupNextLevel()
         ship.resetHP()
         level = settings.level
-        settings.levelHeading = Text(settings.gameDisplay, 120, 500, 340, settings.light_orange, "Farm {0}".format(level))
+        settings.levelHeading = Text(settings.gameDisplay, 120, 425, 175, settings.light_orange, "Farm {0}".format(level))
         updatedHeading = settings.levelHeading
         settings.startUX[0] = updatedHeading
         settings.state = "startLevel"
@@ -172,7 +172,7 @@ def update_characters(settings, player, bullets, tb):
     for f in settings.farmers:
         f.blit_self()
     for a in settings.animals:
-        if a.rect.bottom > 550:
+        if a.rect.bottom > 350:
             a.blit_self()
     # used to control how long the tb is displayed on the screen
     if tb.lifespan > 0:
@@ -223,7 +223,7 @@ def setupMovement():
 
 def setStartPoint(numCharacters):
     """ set up the characters to be evenly spaced"""
-    evenDistance = int(1000 / (numCharacters + 1 ))
+    evenDistance = int(850 / (numCharacters + 1 ))
     positions = [ evenDistance * (x+ 1) for x in range(0, numCharacters)]
 
     negOffset = -int(evenDistance * 0.15)
@@ -252,7 +252,7 @@ def makeFarmer(settings):
         shotTrig= random.choice(possible)
 
         location = startPoints[x]
-        settings.farmers.add(Farmer(settings.gameDisplay, location, 730, left, right, 3, shotTrig))
+        settings.farmers.add(Farmer(settings.gameDisplay, location, 530, left, right, 3, shotTrig))
 
 def makeCow(settings):
     """ function to make a cow"""
@@ -265,9 +265,9 @@ def makeCow(settings):
         left, right = setupMovement()
 
         location = startPoints[x]
-        settings.animals.add(Cow(settings.gameDisplay, location, 770, left, right, 5, settings.cowLeft, settings.cowRight , settings.cowsSay))
+        settings.animals.add(Cow(settings.gameDisplay, location, 570, left, right, 5, settings.cowLeft, settings.cowRight , settings.cowsSay))
 
 def makeChicken(settings):
     """ function to make chickens"""
     left, right = setupMovement()
-    settings.animals.add(Chicken(settings.gameDisplay, 500, 770, left, right, 7, settings.chickenLeft, settings.chickenRight, settings.chickensSay))
+    settings.animals.add(Chicken(settings.gameDisplay, 425, 570, left, right, 7, settings.chickenLeft, settings.chickenRight, settings.chickensSay))

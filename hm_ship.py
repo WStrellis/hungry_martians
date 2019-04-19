@@ -8,8 +8,8 @@ class Ship(Character):
     def __init__(self,display,centerx,bottom,moving_left,moving_right,speed,hp):
         super().__init__(display,centerx,bottom,moving_left,moving_right,speed)
         """attributes for the player's ship""" 
-        self.ufo_charged = pg.image.load("D:/Python/hungry_martians/alien_ship_charged.png")
-        self.ufo_reloading = pg.image.load("D:/Python/hungry_martians/alien_ship_reloading.png")
+        self.ufo_charged = pg.image.load("alien_ship_charged.png")
+        self.ufo_reloading = pg.image.load("alien_ship_reloading.png")
 
         self.img = self.ufo_charged
 
@@ -24,21 +24,22 @@ class Ship(Character):
         self.beamSound = pg.mixer.Sound("ani-music__massive-laser-blast-laser2.wav")
         self.damageSound = pg.mixer.Sound("danielnieto7__alert.wav")
 
-    def fire_tb(self, tb):
+    def fire_tb(self, tb, gameState):
         """ shoot the tractor beam"""
-        self.beamSound.play()
-        #change the image of the ship to 'charging'
-        self.image = self.ufo_reloading
+        if gameState == 'running':
+            self.beamSound.play()
+            #change the image of the ship to 'charging'
+            self.image = self.ufo_reloading
 
-        # set charging timer to 3 seconds
-        self.chargingTimer = 90
-        self.charged = False
+            # set charging timer to 3 seconds
+            self.chargingTimer = 90
+            self.charged = False
 
-        # center tb under ship
-        tb.rect.centerx = self.rect.centerx
+            # center tb under ship
+            tb.rect.centerx = self.rect.centerx
 
-        # set tractor beam lifespan to 15
-        tb.lifespan = tb.maxlife
+            # set tractor beam lifespan to 15
+            tb.lifespan = tb.maxlife
 
     
     def chargeBeam(self):
@@ -65,7 +66,7 @@ class TBeam(pg.sprite.Sprite):
         self.display_rect = display.get_rect()
 
         # load entity image 
-        self.image = pg.image.load("D:/Python/hungry_martians/tractor_beam.png")
+        self.image = pg.image.load("tractor_beam.png")
 
         # rect size
         self.rect = self.image.get_rect()
