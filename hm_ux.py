@@ -40,10 +40,10 @@ class ShieldIcon(UXcomponent):
         """ change the shield color based on ship hp"""
         tag = 's' + str(ship_hp)
         shields = {
-        's3' : "D:/Python/hungry_martians/green_shield.png",
-        's2' : "D:/Python/hungry_martians/yellow_shield.png",
-        's1' : "D:/Python/hungry_martians/orange_shield.png",
-        's0': "D:/Python/hungry_martians/red_shield.png"
+        's3' : "green_shield.png",
+        's2' : "yellow_shield.png",
+        's1' : "orange_shield.png",
+        's0': "red_shield.png"
         }
         if ship_hp >= 0 :
             self.image = pg.image.load(shields[tag])
